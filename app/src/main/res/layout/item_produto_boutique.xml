@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Produto da seção Boutique (fundo escuro) -->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    tools:background="@color/petlar_escuro">
+
+    <com.google.android.material.imageview.ShapeableImageView
+        android:id="@+id/imgProduto"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.95"
+        android:background="@color/petlar_bege_foto"
+        android:scaleType="centerCrop"
+        app:layout_constraintDimensionRatio="1:1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:shapeAppearance="@style/ShapeAppearance.PetLar.Pequeno"
+        tools:src="@drawable/img_boutique_01" />
+
+    <TextView
+        android:id="@+id/txtCategoria"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="14dp"
+        android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada"
+        android:textSize="10sp"
+        app:layout_constraintEnd_toStartOf="@id/txtPreco"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/imgProduto"
+        tools:text="Nutrição" />
+
+    <TextView
+        android:id="@+id/txtPreco"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="@style/TextAppearance.PetLar.SemSerifa"
+        android:textColor="@color/petlar_escuro_texto"
+        android:textSize="14sp"
+        app:layout_constraintBaseline_toBaselineOf="@id/txtCategoria"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:text="R$ 189,00" />
+
+    <TextView
+        android:id="@+id/txtNome"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+        android:minLines="2"
+        android:textColor="@color/petlar_escuro_texto"
+        android:textSize="17sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtCategoria"
+        tools:text="Ração Holística Equilíbrio Natural" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnAdicionar"
+        style="@style/Widget.PetLar.Button.Dourado"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        app:layout_constraintVertical_bias="1"
+        android:text="@string/boutique_adicionar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/txtNome" />
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Tela larga: todos os links na mesma linha do logo, como no site -->
+    <integer name="visibilidade_menu_em_linha">0</integer>
+    <integer name="visibilidade_menu_segunda_linha">2</integer>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="white">#FFFFFFFF</color>
+
+    <!-- Paleta do site PetLar Sanctuary (style.css / carrinho.html) -->
+    <color name="petlar_fundo">#FFF4F3F0</color>
+    <color name="petlar_superficie">#FFFCFBF9</color>
+    <color name="petlar_tutor">#FFF4F0EB</color>
+    <color name="petlar_texto">#FF1A1A1A</color>
+    <color name="petlar_texto_secundario">#FF666666</color>
+    <color name="petlar_marrom">#FF885533</color>
+    <color name="petlar_marrom_texto">#FF5C3A21</color>
+    <color name="petlar_dourado">#FFC5A880</color>
+    <color name="petlar_taupe">#FF8C786D</color>
+    <color name="petlar_escuro">#FF2B2320</color>
+    <color name="petlar_escuro_texto">#FFF4F0EB</color>
+    <color name="petlar_escuro_texto_secundario">#FFB0A59F</color>
+    <color name="petlar_escuro_divisor">#1AFFFFFF</color>
+    <color name="petlar_bege">#FFEDD8C7</color>
+    <color name="petlar_bege_foto">#FFE8E2D8</color>
+    <color name="petlar_bege_selecao">#FFFDFBF7</color>
+    <color name="petlar_borda">#FFE6E2DC</color>
+    <color name="petlar_borda_forte">#FFDCD8D0</color>
+    <color name="petlar_sucesso">#FF2E7D32</color>
+    <color name="petlar_erro">#FFD9534F</color>
+    <color name="petlar_banner_inicio">#FFF7F1EB</color>
+    <color name="petlar_banner_fim">#FFECDCD0</color>
+    <color name="petlar_banner_borda">#FFD5C3B5</color>
+    <color name="petlar_sobreposicao_hero">#80000000</color>
+</resources>

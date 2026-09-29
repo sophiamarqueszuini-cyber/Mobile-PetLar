@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- .item-carrinho -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="16dp">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/imgProduto"
+            android:layout_width="76dp"
+            android:layout_height="76dp"
+            android:background="@color/petlar_superficie"
+            android:importantForAccessibility="no"
+            android:padding="1dp"
+            android:scaleType="centerCrop"
+            app:shapeAppearance="@style/ShapeAppearance.PetLar.Medio"
+            app:strokeColor="@color/petlar_borda"
+            app:strokeWidth="1dp"
+            tools:src="@drawable/img_boutique_01" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txtNome"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAppearance="@style/TextAppearance.PetLar.CartaoTitulo"
+                android:textSize="16sp"
+                tools:text="Ração Holística Equilíbrio Natural" />
+
+            <TextView
+                android:id="@+id/txtPrecoUnitario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:textAppearance="@style/TextAppearance.PetLar.Corpo"
+                android:textColor="#FF777777"
+                android:textSize="14sp"
+                tools:text="R$ 189,00 cada" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="12dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:background="@drawable/fundo_quantidade"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <ImageButton
+                android:id="@+id/btnMenos"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/carrinho_diminuir"
+                android:src="@drawable/ic_menos"
+                app:tint="@color/petlar_texto" />
+
+            <TextView
+                android:id="@+id/txtQuantidade"
+                android:layout_width="32dp"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:textColor="@color/petlar_texto"
+                android:textSize="16sp"
+                tools:text="1" />
+
+            <ImageButton
+                android:id="@+id/btnMais"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:contentDescription="@string/carrinho_aumentar"
+                android:src="@drawable/ic_mais"
+                app:tint="@color/petlar_texto" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/btnRemover"
+            android:layout_width="wrap_content"
+            android:layout_height="40dp"
+            android:layout_marginStart="12dp"
+            android:background="?attr/selectableItemBackground"
+            android:fontFamily="@font/zilla_slab_medium"
+            android:gravity="center"
+            android:paddingHorizontal="6dp"
+            android:text="@string/carrinho_remover"
+            android:textColor="@color/petlar_erro"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/txtSubtotal"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/zilla_slab_semibold"
+            android:gravity="end"
+            android:textColor="@color/petlar_texto"
+            android:textSize="17sp"
+            tools:text="R$ 189,00" />
+    </LinearLayout>
+</LinearLayout>

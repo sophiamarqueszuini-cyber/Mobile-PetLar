@@ -1,0 +1,154 @@
+<resources>
+    <string name="app_name">PetLar</string>
+    <string name="marca_nome">PetLar Sanctuary</string>
+    <string name="marca_sub">Santuário &amp; Curadoria</string>
+    <string name="marca_slogan">“Onde o afeto encontra o seu lugar”</string>
+    <string name="voltar">Voltar</string>
+    <string name="nao_informado">Não informado</string>
+    <string name="seta">→</string>
+
+    <!-- Campos comuns -->
+    <string name="campo_nome">Nome completo</string>
+    <string name="campo_email">E-mail</string>
+    <string name="campo_telefone">Telefone</string>
+    <string name="campo_cpf">CPF</string>
+    <string name="campo_senha">Senha</string>
+    <string name="campo_confirmar_senha">Confirmar senha</string>
+    <string name="campo_opcional">Opcional</string>
+    <string name="campo_senha_ajuda">Mínimo de 6 caracteres</string>
+
+    <!-- Erros de validação -->
+    <string name="erro_nome">Informe o nome completo</string>
+    <string name="erro_email_vazio">Informe o e-mail</string>
+    <string name="erro_email_invalido">E-mail inválido</string>
+    <string name="erro_email_em_uso">Já existe uma conta com este e-mail</string>
+    <string name="erro_telefone">Telefone deve ter 10 ou 11 dígitos</string>
+    <string name="erro_cpf">CPF deve ter 11 dígitos</string>
+    <string name="erro_senha_vazia">Informe a senha</string>
+    <string name="erro_senha_curta">A senha deve ter pelo menos 6 caracteres</string>
+    <string name="erro_senhas_diferentes">As senhas não coincidem</string>
+    <string name="erro_login">E-mail ou senha incorretos</string>
+
+    <!-- Login -->
+    <string name="login_titulo">Bem-vindo(a) ao seu refúgio</string>
+    <string name="login_esqueci_senha">Esqueci minha senha</string>
+    <string name="login_entrar">Entrar</string>
+    <string name="login_sem_conta">Não tem conta?</string>
+    <string name="login_cadastrar">Cadastre-se</string>
+
+    <!-- Cadastro -->
+    <string name="cadastro_titulo">Criar conta</string>
+    <string name="cadastro_tag">Novo tutor</string>
+    <string name="cadastro_subtitulo">Preencha seus dados para começar</string>
+    <string name="cadastro_botao">Cadastrar</string>
+    <string name="cadastro_ja_tem_conta">Já tem conta?</string>
+    <string name="cadastro_sucesso">Conta criada com sucesso!</string>
+
+    <!-- Recuperar senha -->
+    <string name="recuperar_titulo">Recuperar senha</string>
+    <string name="recuperar_tag">Acesso</string>
+    <string name="recuperar_descricao">Informe o e-mail da sua conta e enviaremos as instruções para criar uma nova senha.</string>
+    <string name="recuperar_botao">Enviar instruções</string>
+    <string name="recuperar_dialogo_titulo">Verifique seu e-mail</string>
+    <string name="recuperar_dialogo_mensagem">Se houver uma conta com %1$s, você receberá as instruções para redefinir a senha.</string>
+    <string name="ok">OK</string>
+
+    <!-- Início (mesmas seções do site) -->
+    <string name="inicio_saudacao">Olá, %1$s</string>
+    <string name="inicio_hero">O refúgio perfeito para quem você ama</string>
+    <string name="abrir_carrinho">Abrir carrinho</string>
+    <string name="abrir_perfil">Abrir perfil</string>
+
+    <!-- Navbar (mesmos links do site) -->
+    <string name="nav_proposito">Nosso Propósito</string>
+    <string name="nav_cuidados">Cuidados</string>
+    <string name="nav_boutique">Boutique</string>
+    <string name="nav_tutor">Espaço Tutor</string>
+    <string name="nav_contato">Contato</string>
+
+    <string name="proposito_tag">Nosso propósito</string>
+    <string name="proposito_titulo">Nascemos do desejo de transformar o cuidado animal em hospitalidade</string>
+    <string name="proposito_texto">Fundado em 2024, o PetLar Sanctuary nasceu da convicção de que o espaço de convivência com animais não precisa ser impessoal. Trabalhamos com atendimento individual e horário marcado para zerar o estresse. Se formos além dos acessórios tradicionais, criamos um refúgio onde o design e o afeto caminham juntos, elevando a experiência do animal e da casa.</string>
+
+    <string name="cuidados_tag">Cuidados</string>
+    <string name="cuidados_titulo">Cuidados avançados para o bem-estar do seu pet</string>
+    <string name="cuidados_preco">A partir de %1$s</string>
+    <string name="cuidados_reservar">Reservar serviço</string>
+
+    <string name="boutique_tag">Boutique</string>
+    <string name="boutique_titulo">Itens essenciais para o bem-estar do seu pet</string>
+    <string name="boutique_adicionar">Adicionar ao carrinho</string>
+    <string name="boutique_adicionado">Adicionado!</string>
+    <string name="boutique_curadoria">Uma curadoria que se renova a cada estação</string>
+    <string name="boutique_ver_tudo">Ver toda a boutique</string>
+
+    <string name="tutor_tag">Espaço do tutor</string>
+    <string name="tutor_titulo">Enquanto seu pet se cuida, você relaxa</string>
+
+    <string name="contato_tag">Contato &amp; redes</string>
+    <string name="contato_titulo">Menos barulho, mais conexão. Onde o bem-estar do seu pet fala mais alto</string>
+    <string name="contato_canal">%1$s /</string>
+
+    <string name="cartao_tag">Cartão de visita digital</string>
+    <string name="cartao_titulo">Leve o PetLar no bolso</string>
+    <string name="cartao_texto">Um cartão que vira. A frente carrega a marca; o verso, todos os caminhos para falar com a gente — toque para descobrir.</string>
+    <string name="cartao_instrucao">Toque no cartão para virar</string>
+    <string name="cartao_verso_titulo">Fale com a gente</string>
+    <string name="cartao_endereco">Endereço</string>
+
+    <string name="rodape_direitos">© Copyright — Todos os direitos reservados</string>
+    <string name="rodape_contato">Contato &amp; Redes</string>
+    <string name="rodape_endereco">Endereço</string>
+
+    <!-- Carrinho (carrinho.html) -->
+    <string name="carrinho_titulo">Meu Carrinho</string>
+    <string name="carrinho_vazio">Seu carrinho está vazio no momento.</string>
+    <string name="carrinho_explorar">Explorar a Boutique</string>
+    <string name="carrinho_produtos">Produtos no Carrinho</string>
+    <string name="carrinho_cada">%1$s cada</string>
+    <string name="carrinho_remover">Remover</string>
+    <string name="carrinho_diminuir">Diminuir quantidade</string>
+    <string name="carrinho_aumentar">Aumentar quantidade</string>
+    <string name="carrinho_assinatura" formatted="false">Clube de Assinaturas PetLar: receba seus produtos favoritos automaticamente e ganhe 10% de desconto + Frete Grátis.</string>
+    <string name="carrinho_assinar">Assinar</string>
+    <string name="carrinho_assinatura_ok">Assinatura selecionada para este pedido!</string>
+    <string name="carrinho_frete_titulo">📍 Calcular Frete e Opções de Retirada</string>
+    <string name="carrinho_cep">Digite seu CEP</string>
+    <string name="carrinho_consultar">Consultar</string>
+    <string name="carrinho_cep_invalido">Informe um CEP válido</string>
+    <string name="carrinho_pagamento_titulo">💳 Formas de Pagamento Aceitas</string>
+    <string name="carrinho_pagamento_sub">Selecione a opção desejada para finalizar:</string>
+    <string name="carrinho_resumo">Resumo do Pedido</string>
+    <string name="carrinho_cupom">Cupom de desconto</string>
+    <string name="carrinho_aplicar">Aplicar</string>
+    <string name="carrinho_cupom_ok" formatted="false">Cupom de 10% aplicado com sucesso!</string>
+    <string name="carrinho_cupom_invalido">Cupom inválido ou expirado</string>
+    <string name="carrinho_subtotal">Subtotal</string>
+    <string name="carrinho_frete">Frete / Retirada</string>
+    <string name="carrinho_gratis">Grátis</string>
+    <string name="carrinho_desconto_cupom">Desconto do cupom</string>
+    <string name="carrinho_desconto_pix" formatted="false">Desconto PIX (5%)</string>
+    <string name="carrinho_total">Total:</string>
+    <string name="carrinho_parcelas">Em até 6x de %1$s sem juros</string>
+    <string name="carrinho_finalizar">Finalizar Pedido</string>
+    <string name="carrinho_continuar">← Continuar comprando</string>
+    <string name="carrinho_esvaziar">Esvaziar carrinho</string>
+    <string name="carrinho_esvaziar_pergunta">Tem certeza de que deseja esvaziar seu carrinho?</string>
+    <string name="carrinho_esvaziar_sim">Esvaziar</string>
+    <string name="cancelar">Cancelar</string>
+    <string name="menos_valor">- %1$s</string>
+
+    <string name="pedido_sucesso_titulo">Pedido Realizado com Sucesso!</string>
+    <string name="pedido_sucesso_texto">Obrigado por comprar na PetLar. Seu pedido #%1$d já está sendo processado.</string>
+    <string name="pedido_status">Status atual: Pagamento confirmado</string>
+    <string name="pedido_forma_pagamento">Forma de pagamento: %1$s</string>
+    <string name="pedido_total">Total do pedido: %1$s</string>
+    <string name="pedido_voltar_inicio">Voltar ao início</string>
+
+    <!-- Perfil -->
+    <string name="perfil_titulo">Meu perfil</string>
+    <string name="perfil_tag">Espaço do tutor</string>
+    <string name="perfil_editar">Editar perfil</string>
+    <string name="perfil_enderecos">Meus endereços</string>
+    <string name="perfil_sair">Sair da conta</string>
+</resources>

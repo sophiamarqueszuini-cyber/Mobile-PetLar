@@ -1,0 +1,22 @@
+# Android Studio / IntelliJ
+*.iml
+.idea/
+.kotlin/
+
+# Gradle
+.gradle/
+build/
+/captures
+.externalNativeBuild
+.cxx
+
+# Configuração local (caminho do SDK de cada máquina)
+local.properties
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Relatórios de falha da JVM
+hs_err_pid*.log
+replay_pid*.log

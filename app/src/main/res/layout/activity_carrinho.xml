@@ -1,0 +1,482 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/petlar_superficie"
+    android:orientation="vertical"
+    tools:context=".activity.Carrinho">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/white"
+        app:navigationContentDescription="@string/voltar"
+        app:navigationIcon="@drawable/ic_voltar"
+        app:title="@string/carrinho_titulo" />
+
+    <View style="@style/Widget.PetLar.Divisor" />
+
+    <ScrollView
+        android:id="@+id/rolagem"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="18dp">
+
+            <!-- Carrinho vazio -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cartaoVazio"
+                style="@style/Widget.PetLar.Card.Arredondado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:contentPaddingBottom="56dp"
+                app:contentPaddingLeft="20dp"
+                app:contentPaddingRight="20dp"
+                app:contentPaddingTop="56dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center"
+                        android:text="@string/carrinho_vazio"
+                        android:textColor="@color/petlar_texto_secundario"
+                        android:textSize="19sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnExplorar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:paddingHorizontal="28dp"
+                        android:text="@string/carrinho_explorar" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Pedido finalizado -->
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cartaoSucesso"
+                style="@style/Widget.PetLar.Card.Arredondado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:contentPadding="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:importantForAccessibility="no"
+                        android:text="🎉"
+                        android:textSize="48sp"
+                        tools:ignore="HardcodedText" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                        android:gravity="center"
+                        android:text="@string/pedido_sucesso_titulo"
+                        android:textColor="@color/petlar_escuro"
+                        android:textSize="26sp" />
+
+                    <TextView
+                        android:id="@+id/txtPedidoNumero"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                        android:textAppearance="@style/TextAppearance.PetLar.Corpo"
+                        tools:text="Obrigado por comprar na PetLar. Seu pedido #123456 já está sendo processado." />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="20dp"
+                        android:background="@drawable/fundo_quantidade"
+                        android:backgroundTint="@color/petlar_bege_selecao"
+                        android:orientation="vertical"
+                        android:padding="16dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:fontFamily="@font/zilla_slab_semibold"
+                            android:text="@string/pedido_status"
+                            android:textColor="@color/petlar_dourado"
+                            android:textSize="15sp" />
+
+                        <TextView
+                            android:id="@+id/txtPedidoPagamento"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:textColor="#FF333333"
+                            android:textSize="15sp"
+                            tools:text="Forma de pagamento: PIX" />
+
+                        <TextView
+                            android:id="@+id/txtPedidoTotal"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:fontFamily="@font/zilla_slab_semibold"
+                            android:textColor="@color/petlar_escuro"
+                            android:textSize="17sp"
+                            tools:text="Total do pedido: R$ 189,00" />
+                    </LinearLayout>
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnVoltarInicio"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="24dp"
+                        android:text="@string/pedido_voltar_inicio" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Carrinho com produtos -->
+            <LinearLayout
+                android:id="@+id/conteudo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.PetLar.Card.Arredondado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    app:contentPaddingBottom="6dp"
+                    app:contentPaddingLeft="20dp"
+                    app:contentPaddingRight="20dp"
+                    app:contentPaddingTop="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/carrinho_produtos"
+                            android:textAppearance="@style/TextAppearance.PetLar.CartaoTitulo" />
+
+                        <LinearLayout
+                            android:id="@+id/listaItens"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:showDividers="middle"
+                            android:divider="@drawable/fundo_linha_contato" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Banner Clube de Assinaturas -->
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:background="@drawable/fundo_banner_assinatura"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal"
+                    android:padding="18dp">
+
+                    <TextView
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="@string/carrinho_assinatura"
+                        android:textColor="@color/petlar_marrom_texto"
+                        android:textSize="15sp" />
+
+                    <com.google.android.material.button.MaterialButton
+                        android:id="@+id/btnAssinar"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="12dp"
+                        android:minHeight="44dp"
+                        android:paddingHorizontal="16dp"
+                        android:text="@string/carrinho_assinar"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <!-- Frete -->
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.PetLar.Card.Arredondado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:contentPadding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:text="@string/carrinho_frete_titulo"
+                            android:textAppearance="@style/TextAppearance.PetLar.CartaoTitulo" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/layoutCep"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="@string/carrinho_cep">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edtCep"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:digits="0123456789-"
+                                    android:imeOptions="actionDone"
+                                    android:inputType="number"
+                                    android:maxLength="9" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnConsultar"
+                                style="@style/Widget.PetLar.Button.Escuro"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="1dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minHeight="56dp"
+                                android:text="@string/carrinho_consultar"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/listaFrete"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="6dp"
+                            android:orientation="vertical"
+                            android:visibility="gone" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Pagamento -->
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.PetLar.Card.Arredondado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:contentPadding="20dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/carrinho_pagamento_titulo"
+                            android:textAppearance="@style/TextAppearance.PetLar.CartaoTitulo" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:text="@string/carrinho_pagamento_sub"
+                            android:textAppearance="@style/TextAppearance.PetLar.Corpo"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:id="@+id/listaPagamento"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:orientation="vertical" />
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+
+                <!-- Resumo -->
+                <com.google.android.material.card.MaterialCardView
+                    style="@style/Widget.PetLar.Card.Arredondado"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    app:contentPadding="22dp">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="14dp"
+                            android:text="@string/carrinho_resumo"
+                            android:textAppearance="@style/TextAppearance.PetLar.CartaoTitulo"
+                            android:textSize="20sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="12dp"
+                            android:orientation="horizontal">
+
+                            <com.google.android.material.textfield.TextInputLayout
+                                android:id="@+id/layoutCupom"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:hint="@string/carrinho_cupom">
+
+                                <com.google.android.material.textfield.TextInputEditText
+                                    android:id="@+id/edtCupom"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:imeOptions="actionDone"
+                                    android:inputType="textCapCharacters" />
+                            </com.google.android.material.textfield.TextInputLayout>
+
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/btnAplicarCupom"
+                                style="@style/Widget.PetLar.Button.Contorno"
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                android:layout_marginStart="10dp"
+                                android:layout_marginTop="1dp"
+                                android:insetTop="0dp"
+                                android:insetBottom="0dp"
+                                android:minHeight="56dp"
+                                android:text="@string/carrinho_aplicar"
+                                android:textSize="12sp" />
+                        </LinearLayout>
+
+                        <include
+                            android:id="@+id/linhaSubtotal"
+                            layout="@layout/item_linha_valor" />
+
+                        <include
+                            android:id="@+id/linhaFrete"
+                            layout="@layout/item_linha_valor" />
+
+                        <include
+                            android:id="@+id/linhaCupom"
+                            layout="@layout/item_linha_valor" />
+
+                        <include
+                            android:id="@+id/linhaPix"
+                            layout="@layout/item_linha_valor" />
+
+                        <View
+                            style="@style/Widget.PetLar.Divisor"
+                            android:layout_marginTop="18dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_weight="1"
+                                android:fontFamily="@font/zilla_slab_bold"
+                                android:text="@string/carrinho_total"
+                                android:textColor="@color/petlar_texto"
+                                android:textSize="21sp" />
+
+                            <TextView
+                                android:id="@+id/txtTotal"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/zilla_slab_bold"
+                                android:textColor="@color/petlar_texto"
+                                android:textSize="21sp"
+                                tools:text="R$ 189,00" />
+                        </LinearLayout>
+
+                        <TextView
+                            android:id="@+id/txtParcelas"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="4dp"
+                            android:gravity="end"
+                            android:textColor="@color/petlar_texto_secundario"
+                            android:textSize="14sp"
+                            tools:text="Em até 6x de R$ 31,50 sem juros" />
+
+                        <com.google.android.material.button.MaterialButton
+                            android:id="@+id/btnFinalizar"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="22dp"
+                            android:minHeight="56dp"
+                            android:text="@string/carrinho_finalizar"
+                            app:elevation="4dp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:orientation="horizontal">
+
+                            <TextView
+                                android:id="@+id/btnContinuar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:text="@string/carrinho_continuar"
+                                android:textColor="@color/petlar_texto_secundario"
+                                android:textSize="14sp" />
+
+                            <Space
+                                android:layout_width="0dp"
+                                android:layout_height="0dp"
+                                android:layout_weight="1" />
+
+                            <TextView
+                                android:id="@+id/btnEsvaziar"
+                                android:layout_width="wrap_content"
+                                android:layout_height="44dp"
+                                android:background="?attr/selectableItemBackground"
+                                android:gravity="center_vertical"
+                                android:text="@string/carrinho_esvaziar"
+                                android:textColor="@color/petlar_texto_secundario"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </LinearLayout>
+                </com.google.android.material.card.MaterialCardView>
+            </LinearLayout>
+        </FrameLayout>
+    </ScrollView>
+</LinearLayout>

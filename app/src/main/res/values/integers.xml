@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colunas das grades em tela vertical -->
+    <integer name="colunas_galeria">1</integer>
+    <integer name="colunas_boutique">2</integer>
+    <integer name="colunas_proposito">2</integer>
+
+    <!-- Navbar fixa. Valores = índice do enum android:visibility (0 = visible, 1 = invisible, 2 = gone).
+         Tela estreita: links numa segunda linha; a primeira linha mantém o espaço (invisible)
+         para os ícones continuarem à direita. -->
+    <integer name="visibilidade_menu_em_linha">1</integer>
+    <integer name="visibilidade_menu_segunda_linha">0</integer>
+</resources>

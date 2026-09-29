@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/petlar_escuro"
+    android:orientation="vertical"
+    tools:context=".activity.Produtos">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        android:background="@color/petlar_escuro"
+        app:navigationContentDescription="@string/voltar"
+        app:navigationIcon="@drawable/ic_voltar"
+        app:navigationIconTint="@color/petlar_escuro_texto"
+        app:title="@string/boutique_tag"
+        app:titleTextColor="@color/petlar_escuro_texto">
+
+        <include
+            android:id="@+id/carrinho"
+            layout="@layout/include_botao_carrinho"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_gravity="end"
+            android:layout_marginEnd="8dp" />
+    </com.google.android.material.appbar.MaterialToolbar>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/petlar_escuro_divisor" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="18dp">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="24dp"
+                android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                android:text="@string/boutique_titulo"
+                android:textColor="@color/petlar_escuro_texto"
+                android:textSize="30sp" />
+
+            <GridLayout
+                android:id="@+id/gridProdutos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="@integer/colunas_boutique" />
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="24dp"
+                android:background="@color/petlar_escuro_divisor" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="6dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="16dp"
+                android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                android:text="@string/boutique_curadoria"
+                android:textColor="@color/petlar_escuro_texto_secundario"
+                android:textSize="15sp"
+                android:textStyle="italic" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

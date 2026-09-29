@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="espaco_grade">6dp</dimen>
+    <dimen name="espaco_entre_linhas">14dp</dimen>
+    <dimen name="altura_link_menu">34dp</dimen>
+    <dimen name="espaco_link_menu">7dp</dimen>
+</resources>

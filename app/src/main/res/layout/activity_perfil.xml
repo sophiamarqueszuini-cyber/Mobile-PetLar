@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/petlar_superficie"
+    android:orientation="vertical"
+    tools:context=".activity.Perfil">
+
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:navigationContentDescription="@string/voltar"
+        app:navigationIcon="@drawable/ic_voltar"
+        app:title="@string/perfil_titulo" />
+
+    <View style="@style/Widget.PetLar.Divisor" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/petlar_fundo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.PetLar.Card.Arredondado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentPadding="24dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:id="@+id/txtIniciais"
+                        android:layout_width="84dp"
+                        android:layout_height="84dp"
+                        android:background="@drawable/fundo_avatar"
+                        android:fontFamily="@font/zilla_slab_semibold"
+                        android:gravity="center"
+                        android:importantForAccessibility="no"
+                        android:textColor="@color/petlar_marrom"
+                        android:textSize="30sp"
+                        tools:text="MS" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:text="@string/perfil_tag"
+                        android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+                    <TextView
+                        android:id="@+id/txtNome"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="4dp"
+                        android:textAppearance="@style/TextAppearance.PetLar.Titulo"
+                        android:textSize="26sp"
+                        tools:text="Maria Silva" />
+
+                    <TextView
+                        android:id="@+id/txtEmail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.PetLar.Corpo"
+                        tools:text="maria@petlar.com" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.PetLar.Card.Arredondado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                app:contentPaddingBottom="8dp"
+                app:contentPaddingLeft="20dp"
+                app:contentPaddingRight="20dp"
+                app:contentPaddingTop="8dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical">
+
+                    <include
+                        android:id="@+id/linhaTelefone"
+                        layout="@layout/item_contato" />
+
+                    <include
+                        android:id="@+id/linhaCpf"
+                        layout="@layout/item_contato" />
+
+                    <include
+                        android:id="@+id/linhaEditar"
+                        layout="@layout/item_contato" />
+
+                    <include
+                        android:id="@+id/linhaEnderecos"
+                        layout="@layout/item_contato" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSair"
+                style="@style/Widget.PetLar.Button.Contorno"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="24dp"
+                android:text="@string/perfil_sair" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="24dp"
+                android:text="@string/marca_slogan"
+                android:textAppearance="@style/TextAppearance.PetLar.Citacao" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

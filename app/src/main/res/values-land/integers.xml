@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Colunas das grades em tela horizontal -->
+    <integer name="colunas_galeria">2</integer>
+    <integer name="colunas_boutique">4</integer>
+    <integer name="colunas_proposito">4</integer>
+</resources>

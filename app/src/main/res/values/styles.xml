@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <!-- Tipografia Material 3 trocada pela Zilla Slab do site -->
+    <style name="TextAppearance.PetLar.HeadlineLarge" parent="TextAppearance.Material3.HeadlineLarge">
+        <item name="fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+    </style>
+    <style name="TextAppearance.PetLar.HeadlineMedium" parent="TextAppearance.Material3.HeadlineMedium">
+        <item name="fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+    </style>
+    <style name="TextAppearance.PetLar.HeadlineSmall" parent="TextAppearance.Material3.HeadlineSmall">
+        <item name="fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+    </style>
+    <style name="TextAppearance.PetLar.TitleLarge" parent="TextAppearance.Material3.TitleLarge">
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+    <style name="TextAppearance.PetLar.TitleMedium" parent="TextAppearance.Material3.TitleMedium">
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+    <style name="TextAppearance.PetLar.TitleSmall" parent="TextAppearance.Material3.TitleSmall">
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+    <style name="TextAppearance.PetLar.BodyLarge" parent="TextAppearance.Material3.BodyLarge">
+        <item name="fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:textSize">17sp</item>
+    </style>
+    <style name="TextAppearance.PetLar.BodyMedium" parent="TextAppearance.Material3.BodyMedium">
+        <item name="fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.PetLar.BodySmall" parent="TextAppearance.Material3.BodySmall">
+        <item name="fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:textSize">13sp</item>
+    </style>
+    <style name="TextAppearance.PetLar.LabelLarge" parent="TextAppearance.Material3.LabelLarge">
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:textSize">15sp</item>
+    </style>
+    <style name="TextAppearance.PetLar.LabelMedium" parent="TextAppearance.Material3.LabelMedium">
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+    <style name="TextAppearance.PetLar.LabelSmall" parent="TextAppearance.Material3.LabelSmall">
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+
+    <!-- Fonte padrão dos TextViews sem textAppearance próprio.
+         (android:fontFamily no tema teria prioridade sobre os textAppearance.) -->
+    <style name="Widget.PetLar.TextView" parent="android:Widget.TextView">
+        <item name="android:textAppearance">@style/TextAppearance.PetLar.Padrao</item>
+    </style>
+    <style name="TextAppearance.PetLar.Padrao" parent="TextAppearance.AppCompat">
+        <item name="android:fontFamily">@font/zilla_slab</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <!-- Fontes do sistema usadas no site (Times New Roman / sans-serif) -->
+    <style name="TextAppearance.PetLar.Serifa" parent="TextAppearance.PetLar.Padrao">
+        <item name="android:fontFamily">serif</item>
+    </style>
+    <style name="TextAppearance.PetLar.SemSerifa" parent="TextAppearance.PetLar.Padrao">
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+
+    <!-- Estilos de texto das seções do site -->
+    <!-- .tag: "NOSSO PROPÓSITO", "CUIDADOS"... -->
+    <style name="TextAppearance.PetLar.Tag" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.18</item>
+        <item name="android:textColor">@color/petlar_texto_secundario</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+    </style>
+    <!-- Tag da boutique: sans-serif dourada -->
+    <style name="TextAppearance.PetLar.Tag.Dourada">
+        <item name="android:textSize">11sp</item>
+        <item name="android:letterSpacing">0.25</item>
+        <item name="android:textColor">@color/petlar_dourado</item>
+        <item name="android:fontFamily">sans-serif</item>
+    </style>
+    <!-- h1 da capa -->
+    <style name="TextAppearance.PetLar.Hero" parent="">
+        <item name="android:textSize">38sp</item>
+        <item name="android:lineSpacingMultiplier">1.0</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+        <item name="android:shadowColor">#99000000</item>
+        <item name="android:shadowDy">2</item>
+        <item name="android:shadowRadius">6</item>
+    </style>
+    <!-- h2 das seções -->
+    <style name="TextAppearance.PetLar.Titulo" parent="">
+        <item name="android:textSize">29sp</item>
+        <item name="android:lineSpacingMultiplier">1.05</item>
+        <item name="android:textColor">@color/petlar_texto</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+    </style>
+    <!-- h3/h4 dos cartões -->
+    <style name="TextAppearance.PetLar.CartaoTitulo" parent="">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/petlar_texto</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+    <!-- Parágrafos em cinza -->
+    <style name="TextAppearance.PetLar.Corpo" parent="">
+        <item name="android:textSize">15sp</item>
+        <item name="android:lineSpacingMultiplier">1.25</item>
+        <item name="android:textColor">@color/petlar_texto_secundario</item>
+        <item name="android:fontFamily">@font/zilla_slab_regular</item>
+    </style>
+    <!-- .lead-text -->
+    <style name="TextAppearance.PetLar.Destaque" parent="TextAppearance.PetLar.Corpo">
+        <item name="android:textSize">17sp</item>
+        <item name="android:lineSpacingMultiplier">1.4</item>
+        <item name="android:textColor">#FF444444</item>
+    </style>
+    <!-- .preco -->
+    <style name="TextAppearance.PetLar.Preco" parent="">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textColor">@color/petlar_marrom</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+    </style>
+    <!-- Frases em itálico ("Onde o afeto encontra o seu lugar") -->
+    <style name="TextAppearance.PetLar.Citacao" parent="">
+        <item name="android:textSize">15sp</item>
+        <item name="android:textColor">@color/petlar_taupe</item>
+        <item name="android:fontFamily">@font/zilla_slab_italic</item>
+    </style>
+    <!-- Links "RESERVAR SERVIÇO", "VER TODA A BOUTIQUE" -->
+    <style name="TextAppearance.PetLar.Link" parent="">
+        <item name="android:textSize">12sp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.18</item>
+        <item name="android:textColor">@color/petlar_marrom</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+    </style>
+
+    <!-- Formas -->
+    <style name="ShapeAppearance.PetLar.Pequeno" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
+    </style>
+    <style name="ShapeAppearance.PetLar.Medio" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">8dp</item>
+    </style>
+    <style name="ShapeAppearance.PetLar.Grande" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">12dp</item>
+    </style>
+
+    <!-- Botões: retos, caixa alta e espaçados como no site -->
+    <style name="Widget.PetLar.Button" parent="Widget.Material3.Button">
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.PetLar.Pequeno</item>
+        <item name="backgroundTint">@color/petlar_marrom</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+    <!-- .btn-add / .btn-calcular -->
+    <style name="Widget.PetLar.Button.Escuro">
+        <item name="backgroundTint">@color/petlar_texto</item>
+    </style>
+    <!-- Botão da boutique -->
+    <style name="Widget.PetLar.Button.Dourado">
+        <item name="android:minHeight">44dp</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:letterSpacing">0.1</item>
+        <item name="fontFamily">sans-serif-medium</item>
+        <item name="android:fontFamily">sans-serif-medium</item>
+        <item name="backgroundTint">@color/petlar_dourado</item>
+        <item name="android:textColor">@color/petlar_escuro</item>
+    </style>
+    <!-- .btn-cupom -->
+    <style name="Widget.PetLar.Button.Contorno" parent="Widget.Material3.Button.OutlinedButton">
+        <item name="android:minHeight">52dp</item>
+        <item name="android:textAllCaps">true</item>
+        <item name="android:letterSpacing">0.08</item>
+        <item name="android:textSize">14sp</item>
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.PetLar.Pequeno</item>
+        <item name="strokeColor">@color/petlar_marrom</item>
+        <item name="android:textColor">@color/petlar_marrom</item>
+    </style>
+    <style name="Widget.PetLar.Button.Texto" parent="Widget.Material3.Button.TextButton">
+        <item name="android:textAllCaps">false</item>
+        <item name="android:letterSpacing">0</item>
+        <item name="android:textSize">15sp</item>
+        <item name="fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:fontFamily">@font/zilla_slab_semibold</item>
+        <item name="android:textColor">@color/petlar_marrom</item>
+    </style>
+
+    <!-- Campos: borda fina, cantos pequenos, fundo branco -->
+    <style name="Widget.PetLar.TextInput" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">4dp</item>
+        <item name="boxCornerRadiusTopEnd">4dp</item>
+        <item name="boxCornerRadiusBottomStart">4dp</item>
+        <item name="boxCornerRadiusBottomEnd">4dp</item>
+        <item name="boxBackgroundColor">@color/white</item>
+        <item name="boxStrokeColor">@color/petlar_marrom</item>
+        <item name="hintTextColor">@color/petlar_marrom</item>
+    </style>
+
+    <!-- Cartões: fundo branco, borda 1dp, sem sombra -->
+    <style name="Widget.PetLar.Card" parent="Widget.Material3.CardView.Outlined">
+        <item name="cardBackgroundColor">@color/white</item>
+        <item name="strokeColor">@color/petlar_borda</item>
+        <item name="strokeWidth">1dp</item>
+        <item name="cardElevation">0dp</item>
+        <item name="shapeAppearance">@style/ShapeAppearance.PetLar.Pequeno</item>
+    </style>
+    <!-- .stat-item / .card-secao: cantos de 12dp -->
+    <style name="Widget.PetLar.Card.Arredondado">
+        <item name="shapeAppearance">@style/ShapeAppearance.PetLar.Grande</item>
+    </style>
+
+    <style name="Widget.PetLar.Toolbar" parent="Widget.Material3.Toolbar">
+        <item name="android:background">@color/petlar_superficie</item>
+        <item name="titleTextAppearance">@style/TextAppearance.PetLar.TitleLarge</item>
+        <item name="titleTextColor">@color/petlar_texto</item>
+    </style>
+
+    <style name="Widget.PetLar.RadioButton" parent="Widget.Material3.CompoundButton.RadioButton">
+        <item name="buttonTint">@color/petlar_marrom</item>
+    </style>
+
+    <!-- Linha divisória como border-bottom do site -->
+    <style name="Widget.PetLar.Divisor" parent="">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">1dp</item>
+        <item name="android:background">@color/petlar_borda</item>
+    </style>
+</resources>

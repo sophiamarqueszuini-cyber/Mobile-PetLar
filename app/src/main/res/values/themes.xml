@@ -1,0 +1,51 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Tema do app com a identidade visual do site PetLar Sanctuary -->
+    <style name="Base.Theme.PetShopTcc" parent="Theme.Material3.Light.NoActionBar">
+        <item name="colorPrimary">@color/petlar_marrom</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="colorPrimaryContainer">@color/petlar_bege</item>
+        <item name="colorOnPrimaryContainer">@color/petlar_marrom_texto</item>
+        <item name="colorSecondary">@color/petlar_dourado</item>
+        <item name="colorOnSecondary">@color/petlar_escuro</item>
+        <item name="colorSecondaryContainer">@color/petlar_tutor</item>
+        <item name="colorOnSecondaryContainer">@color/petlar_escuro</item>
+        <item name="android:colorBackground">@color/petlar_fundo</item>
+        <item name="colorSurface">@color/petlar_superficie</item>
+        <item name="colorOnSurface">@color/petlar_texto</item>
+        <item name="colorOnSurfaceVariant">@color/petlar_texto_secundario</item>
+        <item name="colorOutline">@color/petlar_borda_forte</item>
+        <item name="colorOutlineVariant">@color/petlar_borda</item>
+        <item name="colorError">@color/petlar_erro</item>
+
+        <item name="android:textViewStyle">@style/Widget.PetLar.TextView</item>
+        <item name="textAppearanceHeadlineLarge">@style/TextAppearance.PetLar.HeadlineLarge</item>
+        <item name="textAppearanceHeadlineMedium">@style/TextAppearance.PetLar.HeadlineMedium</item>
+        <item name="textAppearanceHeadlineSmall">@style/TextAppearance.PetLar.HeadlineSmall</item>
+        <item name="textAppearanceTitleLarge">@style/TextAppearance.PetLar.TitleLarge</item>
+        <item name="textAppearanceTitleMedium">@style/TextAppearance.PetLar.TitleMedium</item>
+        <item name="textAppearanceTitleSmall">@style/TextAppearance.PetLar.TitleSmall</item>
+        <item name="textAppearanceBodyLarge">@style/TextAppearance.PetLar.BodyLarge</item>
+        <item name="textAppearanceBodyMedium">@style/TextAppearance.PetLar.BodyMedium</item>
+        <item name="textAppearanceBodySmall">@style/TextAppearance.PetLar.BodySmall</item>
+        <item name="textAppearanceLabelLarge">@style/TextAppearance.PetLar.LabelLarge</item>
+        <item name="textAppearanceLabelMedium">@style/TextAppearance.PetLar.LabelMedium</item>
+        <item name="textAppearanceLabelSmall">@style/TextAppearance.PetLar.LabelSmall</item>
+
+        <item name="materialButtonStyle">@style/Widget.PetLar.Button</item>
+        <item name="textInputStyle">@style/Widget.PetLar.TextInput</item>
+        <item name="materialCardViewStyle">@style/Widget.PetLar.Card</item>
+        <item name="toolbarStyle">@style/Widget.PetLar.Toolbar</item>
+        <item name="radioButtonStyle">@style/Widget.PetLar.RadioButton</item>
+        <item name="materialAlertDialogTheme">@style/ThemeOverlay.PetLar.Dialogo</item>
+    </style>
+
+    <style name="Theme.PetShopTcc" parent="Base.Theme.PetShopTcc" />
+
+    <style name="ThemeOverlay.PetLar.Dialogo" parent="ThemeOverlay.Material3.MaterialAlertDialog">
+        <item name="colorSurface">@color/petlar_superficie</item>
+        <item name="colorSurfaceContainerHigh">@color/petlar_superficie</item>
+        <item name="shapeAppearanceCornerExtraLarge">@style/ShapeAppearance.PetLar.Pequeno</item>
+        <item name="buttonBarPositiveButtonStyle">@style/Widget.PetLar.Button.Texto</item>
+        <item name="buttonBarNegativeButtonStyle">@style/Widget.PetLar.Button.Texto</item>
+    </style>
+</resources>

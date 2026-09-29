@@ -1,0 +1,572 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/petlar_superficie"
+    android:orientation="vertical"
+    tools:context=".activity.MainActivity">
+
+    <!-- NAVBAR -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="8dp">
+
+        <ImageView
+            android:id="@+id/imgLogo"
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/marca_nome"
+            android:src="@drawable/logo_petlar" />
+
+        <!-- Links do menu em linha (telas largas: horizontal/tablet), como no site -->
+        <LinearLayout
+            android:id="@+id/menuEmLinha"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:visibility="@integer/visibilidade_menu_em_linha" />
+
+        <include
+            android:id="@+id/carrinho"
+            layout="@layout/include_botao_carrinho" />
+
+        <ImageButton
+            android:id="@+id/btnPerfil"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:contentDescription="@string/abrir_perfil"
+            android:src="@drawable/ic_perfil"
+            app:tint="@color/petlar_texto" />
+    </LinearLayout>
+
+    <!-- Links do menu em uma segunda linha fixa (tela vertical). O Flow quebra
+         a linha se a tela for estreita, em vez de cortar os links. -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/menuSegundaLinha"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingHorizontal="12dp"
+        android:paddingBottom="6dp"
+        android:visibility="@integer/visibilidade_menu_segunda_linha">
+
+        <androidx.constraintlayout.helper.widget.Flow
+            android:id="@+id/fluxoMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:flow_horizontalGap="2dp"
+            app:flow_horizontalStyle="packed"
+            app:flow_wrapMode="chain"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <View style="@style/Widget.PetLar.Divisor" />
+
+    <ScrollView
+        android:id="@+id/rolagem"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/petlar_fundo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- CAPA -->
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="440dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:importantForAccessibility="no"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/img_hero" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/petlar_sobreposicao_hero" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="bottom"
+                    android:orientation="vertical"
+                    android:padding="24dp">
+
+                    <TextView
+                        android:id="@+id/txtSaudacao"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="@style/TextAppearance.PetLar.Tag"
+                        android:textColor="#E6FFFFFF"
+                        tools:text="Olá, Maria" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="10dp"
+                        android:layout_marginBottom="24dp"
+                        android:text="@string/inicio_hero"
+                        android:textAppearance="@style/TextAppearance.PetLar.Hero" />
+                </LinearLayout>
+            </FrameLayout>
+
+            <!-- NOSSO PROPÓSITO -->
+            <LinearLayout
+                android:id="@+id/secaoProposito"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/proposito_tag"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/proposito_titulo"
+                    android:textAppearance="@style/TextAppearance.PetLar.Titulo" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="24dp"
+                    android:layout_marginBottom="24dp"
+                    android:text="@string/proposito_texto"
+                    android:textAppearance="@style/TextAppearance.PetLar.Destaque" />
+
+                <GridLayout
+                    android:id="@+id/gridPropositos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="@integer/colunas_proposito" />
+            </LinearLayout>
+
+            <!-- CUIDADOS -->
+            <LinearLayout
+                android:id="@+id/secaoCuidados"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/petlar_superficie"
+                android:orientation="vertical"
+                android:paddingVertical="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/cuidados_tag"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="28dp"
+                    android:text="@string/cuidados_titulo"
+                    android:textAppearance="@style/TextAppearance.PetLar.Titulo" />
+
+                <GridLayout
+                    android:id="@+id/listaCuidados"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:columnCount="@integer/colunas_galeria" />
+
+                <TextView
+                    android:id="@+id/btnReservar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="end"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginEnd="24dp"
+                    android:background="@drawable/fundo_link_sublinhado"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingVertical="6dp"
+                    android:text="@string/cuidados_reservar"
+                    android:textAppearance="@style/TextAppearance.PetLar.Link" />
+            </LinearLayout>
+
+            <!-- BOUTIQUE -->
+            <LinearLayout
+                android:id="@+id/secaoBoutique"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/petlar_escuro"
+                android:orientation="vertical"
+                android:paddingVertical="56dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/boutique_tag"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="14dp"
+                    android:layout_marginBottom="32dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                    android:text="@string/boutique_titulo"
+                    android:textColor="@color/petlar_escuro_texto"
+                    android:textSize="30sp" />
+
+                <GridLayout
+                    android:id="@+id/listaBoutique"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:columnCount="@integer/colunas_boutique" />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="36dp"
+                    android:background="@color/petlar_escuro_divisor" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="24dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                    android:text="@string/boutique_curadoria"
+                    android:textColor="@color/petlar_escuro_texto_secundario"
+                    android:textSize="15sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/btnVerBoutique"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="24dp"
+                    android:layout_marginTop="20dp"
+                    android:background="@drawable/fundo_link_sublinhado"
+                    android:foreground="?attr/selectableItemBackground"
+                    android:paddingVertical="6dp"
+                    android:text="@string/boutique_ver_tudo"
+                    android:textAppearance="@style/TextAppearance.PetLar.Link"
+                    android:textColor="@color/petlar_dourado" />
+            </LinearLayout>
+
+            <!-- ESPAÇO DO TUTOR -->
+            <LinearLayout
+                android:id="@+id/secaoTutor"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/petlar_tutor"
+                android:orientation="vertical"
+                android:paddingVertical="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:text="@string/tutor_tag"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="24dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="28dp"
+                    android:text="@string/tutor_titulo"
+                    android:textAppearance="@style/TextAppearance.PetLar.Titulo" />
+
+                <GridLayout
+                    android:id="@+id/listaTutor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginHorizontal="18dp"
+                    android:columnCount="@integer/colunas_galeria" />
+            </LinearLayout>
+
+            <!-- CONTATO & REDES -->
+            <LinearLayout
+                android:id="@+id/secaoContato"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/petlar_superficie"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/contato_tag"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="28dp"
+                    android:text="@string/contato_titulo"
+                    android:textAppearance="@style/TextAppearance.PetLar.Titulo" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="120dp"
+                    android:orientation="horizontal">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_redes_01"
+                        app:shapeAppearance="@style/ShapeAppearance.PetLar.Pequeno" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_marginHorizontal="10dp"
+                        android:layout_weight="1"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_redes_02"
+                        app:shapeAppearance="@style/ShapeAppearance.PetLar.Pequeno" />
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:importantForAccessibility="no"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/img_redes_03"
+                        app:shapeAppearance="@style/ShapeAppearance.PetLar.Pequeno" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/listaContatos"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:orientation="vertical" />
+            </LinearLayout>
+
+            <!-- CARTÃO DE VISITA DIGITAL -->
+            <View style="@style/Widget.PetLar.Divisor" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/petlar_superficie"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/cartao_tag"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:text="@string/cartao_titulo"
+                    android:textAppearance="@style/TextAppearance.PetLar.Titulo" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="12dp"
+                    android:text="@string/cartao_texto"
+                    android:textAppearance="@style/TextAppearance.PetLar.Corpo" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/marca_slogan"
+                    android:textAppearance="@style/TextAppearance.PetLar.Citacao" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_marginTop="32dp"
+                    android:layout_marginBottom="14dp"
+                    android:text="@string/cartao_instrucao"
+                    android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada"
+                    android:textSize="10sp" />
+
+                <FrameLayout
+                    android:id="@+id/cenaCartao"
+                    android:layout_width="280dp"
+                    android:layout_height="400dp"
+                    android:layout_gravity="center_horizontal"
+                    android:contentDescription="@string/cartao_instrucao"
+                    android:focusable="true"
+                    android:clickable="true">
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cartaoFrente"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        app:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="vertical"
+                            android:padding="28dp">
+
+                            <ImageView
+                                android:layout_width="180dp"
+                                android:layout_height="wrap_content"
+                                android:adjustViewBounds="true"
+                                android:importantForAccessibility="no"
+                                android:src="@drawable/logo_petlar" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="16dp"
+                                android:text="@string/marca_sub"
+                                android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada"
+                                android:textSize="10sp" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="24dp"
+                                android:gravity="center"
+                                android:text="@string/marca_slogan"
+                                android:textAppearance="@style/TextAppearance.PetLar.Citacao"
+                                android:textColor="#FF777766"
+                                android:textSize="14sp" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+
+                    <com.google.android.material.card.MaterialCardView
+                        android:id="@+id/cartaoVerso"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:clickable="false"
+                        android:visibility="gone"
+                        app:cardElevation="6dp">
+
+                        <LinearLayout
+                            android:id="@+id/listaContatosCartao"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:padding="28dp">
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="24dp"
+                                android:text="@string/cartao_verso_titulo"
+                                android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada" />
+                        </LinearLayout>
+                    </com.google.android.material.card.MaterialCardView>
+                </FrameLayout>
+            </LinearLayout>
+
+            <!-- RODAPÉ -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/petlar_escuro"
+                android:orientation="vertical"
+                android:paddingHorizontal="24dp"
+                android:paddingVertical="48dp">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                    android:text="@string/marca_nome"
+                    android:textColor="@color/petlar_escuro_texto"
+                    android:textSize="17sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.SemSerifa"
+                    android:text="@string/rodape_direitos"
+                    android:textColor="@color/petlar_escuro_texto_secundario"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                    android:text="@string/rodape_contato"
+                    android:textColor="@color/petlar_escuro_texto"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtRodapeContatos"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.SemSerifa"
+                    android:lineSpacingMultiplier="1.5"
+                    android:textColor="@color/petlar_escuro_texto_secundario"
+                    android:textSize="13sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="28dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.Serifa"
+                    android:text="@string/rodape_endereco"
+                    android:textColor="@color/petlar_escuro_texto"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/txtRodapeEndereco"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:textAppearance="@style/TextAppearance.PetLar.SemSerifa"
+                    android:lineSpacingMultiplier="1.5"
+                    android:textColor="@color/petlar_escuro_texto_secundario"
+                    android:textSize="13sp" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
