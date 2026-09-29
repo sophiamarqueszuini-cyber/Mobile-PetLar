@@ -13,6 +13,8 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.example.petshoptcc.R
 import com.example.petshoptcc.data.CarrinhoRepositorio
+import com.example.petshoptcc.data.PedidoRepositorio
+import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityCarrinhoBinding
 import com.example.petshoptcc.databinding.ItemCarrinhoBinding
 import com.example.petshoptcc.databinding.ItemLinhaValorBinding
@@ -112,11 +114,23 @@ class Carrinho : AppCompatActivity() {
         atualizarResumo()
     }
 
-    private fun atualizarResumo() {
+    private class Resumo(val subtotal: Double, val descontoCupom: Double, val descontoPix: Double, val frete: Double) {
+        val total: Double get() = (subtotal - descontoCupom - descontoPix + frete).coerceAtLeast(0.0)
+    }
+
+    private fun calcularResumo(): Resumo {
         val subtotal = carrinho.itens().sumOf { it.subtotal }
         val descontoCupom = if (cupomAplicado) subtotal * 0.10 else 0.0
         val descontoPix = if (pagamento == 0) (subtotal - descontoCupom) * 0.05 else 0.0
-        val total = (subtotal - descontoCupom - descontoPix + frete).coerceAtLeast(0.0)
+        return Resumo(subtotal, descontoCupom, descontoPix, frete)
+    }
+
+    private fun atualizarResumo() {
+        val resumo = calcularResumo()
+        val subtotal = resumo.subtotal
+        val descontoCupom = resumo.descontoCupom
+        val descontoPix = resumo.descontoPix
+        val total = resumo.total
 
         binding.linhaSubtotal.txtValor.text = subtotal.emReais()
         if (frete == 0.0) {
@@ -158,13 +172,26 @@ class Carrinho : AppCompatActivity() {
     }
 
     private fun finalizarPedido() {
-        val total = binding.txtTotal.text
+        val resumo = calcularResumo()
         val numero = Random.nextInt(100000, 1000000)
+        val usuario = UsuarioRepositorio(this).usuarioLogado()
         // TODO: enviar o pedido ao backend quando a API estiver disponível
+        PedidoRepositorio(this).registrar(
+            numero = numero.toLong(),
+            idCliente = usuario?.idUsuario ?: 0,
+            nomeCliente = usuario?.nome.orEmpty(),
+            emailCliente = usuario?.email.orEmpty(),
+            subtotal = resumo.subtotal,
+            desconto = resumo.descontoCupom + resumo.descontoPix,
+            frete = resumo.frete,
+            total = resumo.total,
+            formaPagamento = formasPagamento[pagamento].titulo,
+            quantidadeItens = carrinho.totalItens()
+        )
         carrinho.limpar()
         binding.txtPedidoNumero.text = getString(R.string.pedido_sucesso_texto, numero)
         binding.txtPedidoPagamento.text = getString(R.string.pedido_forma_pagamento, formasPagamento[pagamento].titulo)
-        binding.txtPedidoTotal.text = getString(R.string.pedido_total, total)
+        binding.txtPedidoTotal.text = getString(R.string.pedido_total, resumo.total.emReais())
         binding.conteudo.isVisible = false
         binding.cartaoVazio.isVisible = false
         binding.cartaoSucesso.isVisible = true

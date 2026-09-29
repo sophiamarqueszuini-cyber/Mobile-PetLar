@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/petlar_superficie"
+    android:orientation="vertical"
+    tools:context=".activity.PainelAdmin">
+
+    <!-- NAVBAR do painel -->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="64dp"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="20dp"
+        android:paddingEnd="8dp">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="44dp"
+            android:adjustViewBounds="true"
+            android:contentDescription="@string/marca_nome"
+            android:src="@drawable/logo_petlar" />
+
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnSair"
+            style="@style/Widget.PetLar.Button.Texto"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/admin_sair" />
+    </LinearLayout>
+
+    <View style="@style/Widget.PetLar.Divisor" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/petlar_fundo">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:paddingHorizontal="24dp"
+            android:paddingVertical="32dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/admin_tag"
+                android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada" />
+
+            <TextView
+                android:id="@+id/txtSaudacao"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:textAppearance="@style/TextAppearance.PetLar.Titulo"
+                tools:text="Olá, Administração PetLar" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="20dp"
+                android:text="@string/admin_subtitulo"
+                android:textAppearance="@style/TextAppearance.PetLar.Corpo" />
+
+            <GridLayout
+                android:id="@+id/gridIndicadores"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="-6dp"
+                android:columnCount="@integer/colunas_proposito" />
+
+            <!-- PEDIDOS -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/admin_pedidos_tag"
+                android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="18dp"
+                android:text="@string/admin_pedidos_titulo"
+                android:textAppearance="@style/TextAppearance.PetLar.Titulo"
+                android:textSize="24sp" />
+
+            <LinearLayout
+                android:id="@+id/listaPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" />
+
+            <TextView
+                android:id="@+id/txtSemPedidos"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/admin_sem_pedidos"
+                android:textAppearance="@style/TextAppearance.PetLar.Citacao"
+                android:visibility="gone" />
+
+            <!-- CLIENTES -->
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="40dp"
+                android:text="@string/admin_clientes_tag"
+                android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="18dp"
+                android:text="@string/admin_clientes_titulo"
+                android:textAppearance="@style/TextAppearance.PetLar.Titulo"
+                android:textSize="24sp" />
+
+            <com.google.android.material.card.MaterialCardView
+                android:id="@+id/cartaoClientes"
+                style="@style/Widget.PetLar.Card.Arredondado"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentPaddingBottom="4dp"
+                app:contentPaddingLeft="18dp"
+                app:contentPaddingRight="18dp"
+                app:contentPaddingTop="4dp">
+
+                <LinearLayout
+                    android:id="@+id/listaClientes"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" />
+            </com.google.android.material.card.MaterialCardView>
+
+            <TextView
+                android:id="@+id/txtSemClientes"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/admin_sem_clientes"
+                android:textAppearance="@style/TextAppearance.PetLar.Citacao"
+                android:visibility="gone" />
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>

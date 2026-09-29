@@ -7,6 +7,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.petshoptcc.R
+import com.example.petshoptcc.data.TipoAcesso
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityCadastroBinding
 import com.example.petshoptcc.util.configurarTela
@@ -76,7 +77,7 @@ class Cadastro : AppCompatActivity() {
             cpf = cpf.ifEmpty { null },
             senha = senha
         )
-        repositorio.autenticar(email, senha)
+        repositorio.entrar(email, senha, TipoAcesso.CLIENTE)
         Toast.makeText(this, R.string.cadastro_sucesso, Toast.LENGTH_SHORT).show()
         startActivity(
             Intent(this, MainActivity::class.java)

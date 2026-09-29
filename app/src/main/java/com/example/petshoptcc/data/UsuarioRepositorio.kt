@@ -2,12 +2,31 @@ package com.example.petshoptcc.data
 
 import android.content.Context
 import androidx.core.content.edit
+import com.example.petshoptcc.model.Perfil
 import com.example.petshoptcc.model.Usuario
 import org.json.JSONObject
 import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
+
+/** Os dois acessos do app, ligados aos perfis do banco (tabela Perfil). */
+enum class TipoAcesso(val perfil: Perfil) {
+    CLIENTE(Perfil(1, "Cliente", "Tutores que compram e agendam serviços", true)),
+    ADMINISTRATIVO(Perfil(2, "Administrativo", "Equipe PetLar: pedidos e clientes", true));
+
+    companion object {
+        fun doPerfil(idPerfil: Long) = entries.firstOrNull { it.perfil.idPerfil == idPerfil } ?: CLIENTE
+    }
+}
+
+sealed interface ResultadoLogin {
+    data class Sucesso(val usuario: Usuario, val tipo: TipoAcesso) : ResultadoLogin
+    /** E-mail ou senha errados. */
+    data object Invalido : ResultadoLogin
+    /** Conta existe, mas é do outro tipo de acesso (ex.: cliente tentando o administrativo). */
+    data class OutroAcesso(val tipoDaConta: TipoAcesso) : ResultadoLogin
+}
 
 /**
  * Guarda os usuários no próprio aparelho (SharedPreferences) enquanto o app
@@ -19,16 +38,60 @@ class UsuarioRepositorio(context: Context) {
     private val prefs = context.applicationContext
         .getSharedPreferences("usuarios", Context.MODE_PRIVATE)
 
+    init {
+        // Sem backend não há como cadastrar a equipe, então o app cria uma conta
+        // administrativa padrão. Troque a senha quando houver servidor.
+        if (!emailCadastrado(ADMIN_EMAIL)) {
+            criar("Administração PetLar", ADMIN_EMAIL, null, null, ADMIN_SENHA, TipoAcesso.ADMINISTRATIVO)
+        }
+    }
+
     fun emailCadastrado(email: String): Boolean = prefs.contains(chave(email))
 
+    /** Cadastro pelo app: sempre cria um cliente. */
     fun cadastrar(nome: String, email: String, telefone: String?, cpf: String?, senha: String): Boolean {
         if (emailCadastrado(email)) return false
+        criar(nome, email, telefone, cpf, senha, TipoAcesso.CLIENTE)
+        return true
+    }
+
+    fun entrar(email: String, senha: String, tipo: TipoAcesso): ResultadoLogin {
+        val json = buscarJson(email) ?: return ResultadoLogin.Invalido
+        val usuario = paraUsuario(json)
+        if (usuario.senhaHash != hash(senha)) return ResultadoLogin.Invalido
+        val tipoDaConta = TipoAcesso.doPerfil(json.optLong("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil))
+        if (tipoDaConta != tipo) return ResultadoLogin.OutroAcesso(tipoDaConta)
+
+        val atualizado = usuario.copy(ultimoLogin = agora())
+        salvar(atualizado, tipoDaConta)
+        prefs.edit { putString(CHAVE_SESSAO, atualizado.email) }
+        return ResultadoLogin.Sucesso(atualizado, tipoDaConta)
+    }
+
+    fun usuarioLogado(): Usuario? = prefs.getString(CHAVE_SESSAO, null)?.let { buscarJson(it) }?.let(::paraUsuario)
+
+    fun tipoLogado(): TipoAcesso? = prefs.getString(CHAVE_SESSAO, null)?.let { buscarJson(it) }
+        ?.let { TipoAcesso.doPerfil(it.optLong("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil)) }
+
+    /** Clientes cadastrados, do mais recente para o mais antigo (painel administrativo). */
+    fun clientes(): List<Usuario> = prefs.all
+        .filterKeys { it.startsWith(PREFIXO) }
+        .values.mapNotNull { (it as? String)?.let(::JSONObject) }
+        .filter { TipoAcesso.doPerfil(it.optLong("idPerfil", 1)) == TipoAcesso.CLIENTE }
+        .map(::paraUsuario)
+        .sortedByDescending { it.dataCadastro }
+
+    fun sair() {
+        prefs.edit { remove(CHAVE_SESSAO) }
+    }
+
+    private fun criar(nome: String, email: String, telefone: String?, cpf: String?, senha: String, tipo: TipoAcesso) {
         val agora = agora()
         salvar(
             Usuario(
                 idUsuario = System.currentTimeMillis(),
                 nome = nome,
-                email = email.lowercase(),
+                email = email.trim().lowercase(),
                 telefone = telefone,
                 cpf = cpf,
                 senhaHash = hash(senha),
@@ -38,34 +101,19 @@ class UsuarioRepositorio(context: Context) {
                 ultimoLogin = null,
                 dataCadastro = agora,
                 dataAtualizacao = agora
-            )
+            ),
+            tipo
         )
-        return true
     }
 
-    fun autenticar(email: String, senha: String): Usuario? {
-        val usuario = buscar(email) ?: return null
-        if (usuario.senhaHash != hash(senha)) return null
-        val atualizado = usuario.copy(ultimoLogin = agora())
-        salvar(atualizado)
-        prefs.edit { putString(CHAVE_SESSAO, atualizado.email) }
-        return atualizado
+    private fun buscarJson(email: String): JSONObject? = prefs.getString(chave(email), null)?.let(::JSONObject)
+
+    private fun salvar(usuario: Usuario, tipo: TipoAcesso) {
+        val json = paraJson(usuario).put("idPerfil", tipo.perfil.idPerfil)
+        prefs.edit { putString(chave(usuario.email), json.toString()) }
     }
 
-    fun usuarioLogado(): Usuario? = prefs.getString(CHAVE_SESSAO, null)?.let { buscar(it) }
-
-    fun sair() {
-        prefs.edit { remove(CHAVE_SESSAO) }
-    }
-
-    private fun buscar(email: String): Usuario? =
-        prefs.getString(chave(email), null)?.let { paraUsuario(JSONObject(it)) }
-
-    private fun salvar(usuario: Usuario) {
-        prefs.edit { putString(chave(usuario.email), paraJson(usuario).toString()) }
-    }
-
-    private fun chave(email: String) = "usuario_" + email.trim().lowercase()
+    private fun chave(email: String) = PREFIXO + email.trim().lowercase()
 
     private fun agora() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
@@ -107,7 +155,10 @@ class UsuarioRepositorio(context: Context) {
     private fun JSONObject.textoOuNulo(campo: String): String? =
         if (has(campo) && !isNull(campo)) getString(campo) else null
 
-    private companion object {
-        const val CHAVE_SESSAO = "sessao_email"
+    companion object {
+        const val ADMIN_EMAIL = "admin@petlar.com"
+        const val ADMIN_SENHA = "admin123"
+        private const val CHAVE_SESSAO = "sessao_email"
+        private const val PREFIXO = "usuario_"
     }
 }

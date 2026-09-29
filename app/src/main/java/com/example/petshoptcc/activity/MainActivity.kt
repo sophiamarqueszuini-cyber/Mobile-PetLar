@@ -11,6 +11,7 @@ import androidx.core.view.isVisible
 import com.example.petshoptcc.R
 import com.example.petshoptcc.data.CarrinhoRepositorio
 import com.example.petshoptcc.data.Catalogo
+import com.example.petshoptcc.data.TipoAcesso
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityMainBinding
 import com.example.petshoptcc.databinding.ItemContatoBinding
@@ -38,9 +39,12 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val usuario = UsuarioRepositorio(this).usuarioLogado()
-        if (usuario == null) {
-            startActivity(Intent(this, LoginActivity::class.java))
+        val usuarios = UsuarioRepositorio(this)
+        val usuario = usuarios.usuarioLogado()
+        val tipo = usuarios.tipoLogado()
+        if (usuario == null || tipo != TipoAcesso.CLIENTE) {
+            // Sem sessão vai para o login; conta administrativa vai para o painel
+            startActivity(if (tipo == null) Intent(this, LoginActivity::class.java) else LoginActivity.intentDaArea(this, tipo))
             finish()
             return
         }

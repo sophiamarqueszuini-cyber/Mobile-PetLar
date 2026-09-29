@@ -20,6 +20,14 @@ private val formatoReais: NumberFormat = NumberFormat.getCurrencyInstance(Locale
 /** 189.0 -> "R$ 189,00" */
 fun Double.emReais(): String = formatoReais.format(this)
 
+/** "2026-09-28 14:05:00" (como é salvo) -> "28/09/2026 14:05"; [comHora] = false -> "28/09/2026". */
+fun String.dataBr(comHora: Boolean = true): String {
+    val data = substringBefore(' ').split('-')
+    if (data.size != 3) return this
+    val dia = "${data[2]}/${data[1]}/${data[0]}"
+    return if (comHora) "$dia ${substringAfter(' ').take(5)}".trim() else dia
+}
+
 /**
  * Desenha a tela atrás das barras do sistema e aplica o espaçamento
  * necessário em [raiz]. [telaEscura] deixa os ícones da barra de status claros.
