@@ -5,6 +5,10 @@ Tem vitrine de produtos, carrinho, cadastro e login de clientes, perfil com ende
 
 Os dados (usuários, carrinho e pedidos) ficam salvos no próprio aparelho. Não é preciso configurar servidor nem banco de dados.
 
+[![Testar online no Appetize](https://img.shields.io/badge/▶_Testar_online-Appetize.io-8B5A2B?style=for-the-badge)](https://appetize.io/app/b_tzjh7ovdokzdpdbrdgfz722d2q)
+
+Clique no botão acima para abrir o app direto no navegador. Não precisa instalar nada nem criar conta.
+
 ## Conta administrativa
 
 | Login | Senha |
@@ -21,6 +25,9 @@ O APK pronto está em [`apk/PetLar.apk`](apk/PetLar.apk).
 Para baixar, abra o arquivo no GitHub e clique em **Download raw file** (ícone ⬇).
 
 ### No navegador, com o Appetize.io
+**Jeito mais rápido:** abra **[appetize.io/app/b_tzjh7ovdokzdpdbrdgfz722d2q](https://appetize.io/app/b_tzjh7ovdokzdpdbrdgfz722d2q)** e clique em **Tap to play**.
+
+Se o link não abrir (por exemplo, se o limite de minutos do mês acabou), dá para subir o APK na sua própria conta:
 1. Acesse [appetize.io/upload](https://appetize.io/upload) e crie uma conta gratuita.
 2. Arraste o `PetLar.apk` para a área de upload.
 3. Clique em **Tap to play** e espere o celular virtual carregar.
