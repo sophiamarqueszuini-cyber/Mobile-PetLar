@@ -49,6 +49,8 @@ O plano gratuito tem limite de minutos por mês.
 3. Se aparecer um aviso de segurança, toque em **Configurações** e ative **Permitir desta fonte**.
 4. Toque em **Instalar**. Se o Play Protect avisar, toque em **Mais detalhes → Instalar mesmo assim**. O aviso é normal para APK de teste.
 
+Se o celular já tiver uma versão anterior do PetLar, desinstale-a antes. A versão 1.1 foi assinada com outra chave e não instala por cima.
+
 Requer Android 7.0 ou superior.
 
 ---
