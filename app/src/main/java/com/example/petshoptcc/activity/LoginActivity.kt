@@ -6,26 +6,24 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.isVisible
 import com.example.petshoptcc.R
+import com.example.petshoptcc.data.DadosExemplo
 import com.example.petshoptcc.data.ResultadoLogin
 import com.example.petshoptcc.data.TipoAcesso
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityLoginBinding
 import com.example.petshoptcc.util.configurarTela
 
-/** Login com dois acessos: Cliente (loja) e Administrativo (painel da equipe). */
+/** Login único: o perfil da conta decide se abre a loja (cliente) ou o painel da equipe (administrativo). */
 class LoginActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityLoginBinding
     private lateinit var repositorio: UsuarioRepositorio
 
-    private val tipoEscolhido: TipoAcesso
-        get() = if (binding.grupoAcesso.checkedButtonId == R.id.btnAcessoAdmin) TipoAcesso.ADMINISTRATIVO else TipoAcesso.CLIENTE
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         repositorio = UsuarioRepositorio(this)
+        DadosExemplo.carregarSeNecessario(this)
         repositorio.tipoLogado()?.let {
             abrirArea(it)
             return
@@ -34,9 +32,6 @@ class LoginActivity : AppCompatActivity() {
         binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configurarTela(binding.main, incluirTeclado = true)
-
-        binding.grupoAcesso.addOnButtonCheckedListener { _, _, marcado -> if (marcado) atualizarModo() }
-        atualizarModo()
 
         binding.btnEntrar.setOnClickListener { entrar() }
         binding.edtSenha.setOnEditorActionListener { _, actionId, _ ->
@@ -58,17 +53,6 @@ class LoginActivity : AppCompatActivity() {
         }
     }
 
-    /** Administrativo não tem cadastro nem recuperação pelo app. */
-    private fun atualizarModo() {
-        val admin = tipoEscolhido == TipoAcesso.ADMINISTRATIVO
-        binding.txtTitulo.setText(if (admin) R.string.login_titulo_admin else R.string.login_titulo)
-        binding.linhaCadastro.isVisible = !admin
-        binding.btnEsqueciSenha.isVisible = !admin
-        binding.txtAvisoAdmin.isVisible = admin
-        binding.layoutEmail.error = null
-        binding.layoutSenha.error = null
-    }
-
     private fun entrar() {
         val email = binding.edtEmail.text?.toString()?.trim().orEmpty()
         val senha = binding.edtSenha.text?.toString().orEmpty()
@@ -82,12 +66,9 @@ class LoginActivity : AppCompatActivity() {
 
         if (binding.layoutEmail.error != null || binding.layoutSenha.error != null) return
 
-        when (val resultado = repositorio.entrar(email, senha, tipoEscolhido)) {
+        when (val resultado = repositorio.entrar(email, senha)) {
             is ResultadoLogin.Sucesso -> abrirArea(resultado.tipo)
             ResultadoLogin.Invalido -> binding.layoutSenha.error = getString(R.string.erro_login)
-            is ResultadoLogin.OutroAcesso -> binding.layoutEmail.error = getString(
-                if (resultado.tipoDaConta == TipoAcesso.CLIENTE) R.string.erro_acesso_admin else R.string.erro_acesso_cliente
-            )
         }
     }
 

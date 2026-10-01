@@ -15,7 +15,16 @@ Clique no botão acima para abrir o app direto no navegador. Não precisa instal
 |---|---|
 | `admin@petlar.com` | `admin123` |
 
-Para entrar como **cliente**, crie uma conta pela tela de cadastro do app.
+O login é um só: com a conta administrativa, o app abre direto o painel da equipe.
+Para entrar como **cliente**, crie uma conta pela tela de cadastro do app ou use um dos clientes de exemplo.
+
+### Dados de exemplo
+
+Na primeira vez que abre, o app cadastra 6 clientes e 8 pedidos de exemplo (com status variados), para o painel administrativo não começar vazio. Todos os clientes de exemplo usam a senha `cliente123`:
+
+`mariana.costa@email.com` · `rafael.almeida@email.com` · `juliana.ferreira@email.com` · `lucas.oliveira@email.com` · `beatriz.santos@email.com` · `pedro.lima@email.com`
+
+Os exemplos ficam em [`DadosExemplo.kt`](app/src/main/java/com/example/petshoptcc/data/DadosExemplo.kt).
 
 ---
 

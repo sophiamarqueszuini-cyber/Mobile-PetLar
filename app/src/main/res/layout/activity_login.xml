@@ -51,32 +51,6 @@
             android:text="@string/marca_slogan"
             android:textAppearance="@style/TextAppearance.PetLar.Citacao" />
 
-        <com.google.android.material.button.MaterialButtonToggleGroup
-            android:id="@+id/grupoAcesso"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="24dp"
-            app:checkedButton="@id/btnAcessoCliente"
-            app:selectionRequired="true"
-            app:singleSelection="true">
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAcessoCliente"
-                style="@style/Widget.PetLar.Button.Alternar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/login_acesso_cliente" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/btnAcessoAdmin"
-                style="@style/Widget.PetLar.Button.Alternar"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/login_acesso_admin" />
-        </com.google.android.material.button.MaterialButtonToggleGroup>
-
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutEmail"
             android:layout_width="match_parent"
@@ -122,16 +96,6 @@
             android:layout_marginTop="12dp"
             android:text="@string/login_entrar" />
 
-        <TextView
-            android:id="@+id/txtAvisoAdmin"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
-            android:gravity="center"
-            android:text="@string/login_aviso_admin"
-            android:textAppearance="@style/TextAppearance.PetLar.Corpo"
-            android:textSize="14sp"
-            android:visibility="gone" />
 
         <LinearLayout
             android:layout_width="wrap_content"

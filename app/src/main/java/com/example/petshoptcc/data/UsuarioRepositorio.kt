@@ -24,8 +24,6 @@ sealed interface ResultadoLogin {
     data class Sucesso(val usuario: Usuario, val tipo: TipoAcesso) : ResultadoLogin
     /** E-mail ou senha errados. */
     data object Invalido : ResultadoLogin
-    /** Conta existe, mas é do outro tipo de acesso (ex.: cliente tentando o administrativo). */
-    data class OutroAcesso(val tipoDaConta: TipoAcesso) : ResultadoLogin
 }
 
 /**
@@ -55,12 +53,21 @@ class UsuarioRepositorio(context: Context) {
         return true
     }
 
-    fun entrar(email: String, senha: String, tipo: TipoAcesso): ResultadoLogin {
+    /** Cliente de demonstração (ver [DadosExemplo]): igual ao cadastro, mas com a data informada. */
+    fun cadastrarExemplo(
+        id: Long, nome: String, email: String, telefone: String?, cpf: String?, senha: String, dataCadastro: String
+    ): Usuario? {
+        if (emailCadastrado(email)) return null
+        criar(nome, email, telefone, cpf, senha, TipoAcesso.CLIENTE, dataCadastro, id)
+        return buscarJson(email)?.let(::paraUsuario)
+    }
+
+    /** O tipo de acesso vem do perfil da conta, não de uma escolha na tela. */
+    fun entrar(email: String, senha: String): ResultadoLogin {
         val json = buscarJson(email) ?: return ResultadoLogin.Invalido
         val usuario = paraUsuario(json)
         if (usuario.senhaHash != hash(senha)) return ResultadoLogin.Invalido
         val tipoDaConta = TipoAcesso.doPerfil(json.optLong("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil))
-        if (tipoDaConta != tipo) return ResultadoLogin.OutroAcesso(tipoDaConta)
 
         val atualizado = usuario.copy(ultimoLogin = agora())
         salvar(atualizado, tipoDaConta)
@@ -85,11 +92,13 @@ class UsuarioRepositorio(context: Context) {
         prefs.edit { remove(CHAVE_SESSAO) }
     }
 
-    private fun criar(nome: String, email: String, telefone: String?, cpf: String?, senha: String, tipo: TipoAcesso) {
-        val agora = agora()
+    private fun criar(
+        nome: String, email: String, telefone: String?, cpf: String?, senha: String, tipo: TipoAcesso,
+        agora: String = agora(), id: Long = System.currentTimeMillis()
+    ) {
         salvar(
             Usuario(
-                idUsuario = System.currentTimeMillis(),
+                idUsuario = id,
                 nome = nome,
                 email = email.trim().lowercase(),
                 telefone = telefone,

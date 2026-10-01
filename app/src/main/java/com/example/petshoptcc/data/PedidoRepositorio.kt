@@ -56,6 +56,11 @@ class PedidoRepositorio(context: Context) {
         return (0 until lista.length()).map { paraPedido(lista.getJSONObject(it)) }
     }
 
+    /** Pedidos de demonstração (ver [DadosExemplo]), mantendo a lista do mais recente para o mais antigo. */
+    fun adicionarExemplos(exemplos: List<PedidoRegistrado>) {
+        salvar((todos() + exemplos).sortedByDescending { it.pedido.dataPedido })
+    }
+
     fun alterarStatus(idPedido: Long, status: String) {
         salvar(todos().map {
             if (it.pedido.idPedido == idPedido) {

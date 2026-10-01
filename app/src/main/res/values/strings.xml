@@ -35,12 +35,6 @@
     <string name="login_entrar">Entrar</string>
     <string name="login_sem_conta">Não tem conta?</string>
     <string name="login_cadastrar">Cadastre-se</string>
-    <string name="login_acesso_cliente">Cliente</string>
-    <string name="login_acesso_admin">Administrativo</string>
-    <string name="login_titulo_admin">Painel da equipe PetLar</string>
-    <string name="login_aviso_admin">Acesso restrito à equipe PetLar. Contas administrativas não são criadas pelo app.</string>
-    <string name="erro_acesso_admin">Esta conta é de cliente. Use o acesso Cliente.</string>
-    <string name="erro_acesso_cliente">Esta conta é administrativa. Use o acesso Administrativo.</string>
 
     <!-- Cadastro -->
     <string name="cadastro_titulo">Criar conta</string>
