@@ -6,13 +6,14 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.petshoptcc.R
-import com.example.petshoptcc.data.DadosExemplo
 import com.example.petshoptcc.data.ResultadoLogin
 import com.example.petshoptcc.data.TipoAcesso
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityLoginBinding
 import com.example.petshoptcc.util.configurarTela
+import kotlinx.coroutines.launch
 
 /** Login único: o perfil da conta decide se abre a loja (cliente) ou o painel da equipe (administrativo). */
 class LoginActivity : AppCompatActivity() {
@@ -23,7 +24,6 @@ class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         repositorio = UsuarioRepositorio(this)
-        DadosExemplo.carregarSeNecessario(this)
         repositorio.tipoLogado()?.let {
             abrirArea(it)
             return
@@ -54,6 +54,7 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun entrar() {
+        if (!binding.btnEntrar.isEnabled) return // já está enviando (ex.: Enter + toque no botão)
         val email = binding.edtEmail.text?.toString()?.trim().orEmpty()
         val senha = binding.edtSenha.text?.toString().orEmpty()
 
@@ -66,9 +67,17 @@ class LoginActivity : AppCompatActivity() {
 
         if (binding.layoutEmail.error != null || binding.layoutSenha.error != null) return
 
-        when (val resultado = repositorio.entrar(email, senha)) {
-            is ResultadoLogin.Sucesso -> abrirArea(resultado.tipo)
-            ResultadoLogin.Invalido -> binding.layoutSenha.error = getString(R.string.erro_login)
+        binding.btnEntrar.isEnabled = false
+        binding.btnEntrar.setText(R.string.aguarde)
+        lifecycleScope.launch {
+            val resultado = repositorio.entrar(email, senha)
+            binding.btnEntrar.isEnabled = true
+            binding.btnEntrar.setText(R.string.login_entrar)
+            when (resultado) {
+                is ResultadoLogin.Sucesso -> abrirArea(resultado.tipo)
+                ResultadoLogin.Invalido -> binding.layoutSenha.error = getString(R.string.erro_login)
+                is ResultadoLogin.Falha -> binding.layoutSenha.error = getString(resultado.mensagem)
+            }
         }
     }
 

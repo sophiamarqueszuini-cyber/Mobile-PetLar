@@ -2,10 +2,21 @@ package com.example.petshoptcc.data
 
 import android.content.Context
 import androidx.core.content.edit
+import com.example.petshoptcc.R
 import com.example.petshoptcc.model.Perfil
 import com.example.petshoptcc.model.Usuario
+import com.google.firebase.FirebaseNetworkException
+import com.google.firebase.FirebaseTooManyRequestsException
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
+import com.google.firebase.auth.FirebaseAuthInvalidUserException
+import com.google.firebase.auth.FirebaseAuthUserCollisionException
+import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.userProfileChangeRequest
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.tasks.await
 import org.json.JSONObject
-import java.security.MessageDigest
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -24,150 +35,155 @@ sealed interface ResultadoLogin {
     data class Sucesso(val usuario: Usuario, val tipo: TipoAcesso) : ResultadoLogin
     /** E-mail ou senha errados. */
     data object Invalido : ResultadoLogin
+    /** Sem internet, muitas tentativas etc.: [mensagem] é um id de string pronto para a tela. */
+    data class Falha(val mensagem: Int) : ResultadoLogin
+}
+
+sealed interface ResultadoCadastro {
+    data class Sucesso(val usuario: Usuario) : ResultadoCadastro
+    data object EmailEmUso : ResultadoCadastro
+    data class Falha(val mensagem: Int) : ResultadoCadastro
 }
 
 /**
- * Guarda os usuários no próprio aparelho (SharedPreferences) enquanto o app
- * ainda não tem backend. Quando a API existir, basta trocar a implementação
- * destes métodos pelas chamadas ao servidor.
+ * Contas no Firebase, as mesmas do site: o Authentication guarda e-mail e senha e o
+ * Firestore guarda o cadastro na coleção "usuarios" (campos deste [Usuario] + idPerfil).
+ * O cadastro do usuário logado também fica salvo no aparelho, para as telas lerem sem esperar a rede.
  */
 class UsuarioRepositorio(context: Context) {
 
     private val prefs = context.applicationContext
-        .getSharedPreferences("usuarios", Context.MODE_PRIVATE)
+        .getSharedPreferences("sessao", Context.MODE_PRIVATE)
+    private val auth = FirebaseAuth.getInstance()
+    private val usuarios = FirebaseFirestore.getInstance().collection(COLECAO)
 
-    init {
-        // Sem backend não há como cadastrar a equipe, então o app cria uma conta
-        // administrativa padrão. Troque a senha quando houver servidor.
-        if (!emailCadastrado(ADMIN_EMAIL)) {
-            criar("Administração PetLar", ADMIN_EMAIL, null, null, ADMIN_SENHA, TipoAcesso.ADMINISTRATIVO)
+    /** O tipo de acesso vem do perfil da conta, não de uma escolha na tela. */
+    suspend fun entrar(email: String, senha: String): ResultadoLogin = try {
+        val conta = auth.signInWithEmailAndPassword(email.trim(), senha).await().user!!
+        val doc = carregarOuCriar(conta, null, null, null)
+        doc.put("ultimoLogin", agora())
+        usuarios.document(conta.uid).update("ultimoLogin", doc.getString("ultimoLogin")).await()
+        guardarSessao(doc)
+        ResultadoLogin.Sucesso(paraUsuario(doc), tipoDe(doc))
+    } catch (e: Exception) {
+        auth.signOut()
+        if (e is FirebaseAuthInvalidCredentialsException || e is FirebaseAuthInvalidUserException) {
+            ResultadoLogin.Invalido
+        } else {
+            ResultadoLogin.Falha(mensagemDeErro(e))
         }
     }
 
-    fun emailCadastrado(email: String): Boolean = prefs.contains(chave(email))
-
-    /** Cadastro pelo app: sempre cria um cliente. */
-    fun cadastrar(nome: String, email: String, telefone: String?, cpf: String?, senha: String): Boolean {
-        if (emailCadastrado(email)) return false
-        criar(nome, email, telefone, cpf, senha, TipoAcesso.CLIENTE)
-        return true
+    /** Cadastro pelo app: sempre cria um cliente e já deixa logado. */
+    suspend fun cadastrar(nome: String, email: String, telefone: String?, cpf: String?, senha: String): ResultadoCadastro = try {
+        val conta = auth.createUserWithEmailAndPassword(email.trim(), senha).await().user!!
+        conta.updateProfile(userProfileChangeRequest { displayName = nome }).await()
+        val doc = carregarOuCriar(conta, nome, telefone, cpf)
+        guardarSessao(doc)
+        ResultadoCadastro.Sucesso(paraUsuario(doc))
+    } catch (e: FirebaseAuthUserCollisionException) {
+        ResultadoCadastro.EmailEmUso
+    } catch (e: Exception) {
+        ResultadoCadastro.Falha(mensagemDeErro(e))
     }
 
-    /** Cliente de demonstração (ver [DadosExemplo]): igual ao cadastro, mas com a data informada. */
-    fun cadastrarExemplo(
-        id: Long, nome: String, email: String, telefone: String?, cpf: String?, senha: String, dataCadastro: String
-    ): Usuario? {
-        if (emailCadastrado(email)) return null
-        criar(nome, email, telefone, cpf, senha, TipoAcesso.CLIENTE, dataCadastro, id)
-        return buscarJson(email)?.let(::paraUsuario)
+    /** O Firebase envia de verdade o e-mail com o link para criar uma nova senha. Devolve um erro só se não deu para enviar. */
+    suspend fun recuperarSenha(email: String): Int? = try {
+        auth.sendPasswordResetEmail(email.trim()).await()
+        null
+    } catch (e: FirebaseNetworkException) {
+        R.string.erro_sem_internet
+    } catch (e: FirebaseTooManyRequestsException) {
+        R.string.erro_muitas_tentativas
+    } catch (e: Exception) {
+        null // Não revela se o e-mail tem conta
     }
 
-    /** O tipo de acesso vem do perfil da conta, não de uma escolha na tela. */
-    fun entrar(email: String, senha: String): ResultadoLogin {
-        val json = buscarJson(email) ?: return ResultadoLogin.Invalido
-        val usuario = paraUsuario(json)
-        if (usuario.senhaHash != hash(senha)) return ResultadoLogin.Invalido
-        val tipoDaConta = TipoAcesso.doPerfil(json.optLong("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil))
+    fun usuarioLogado(): Usuario? = sessao()?.let(::paraUsuario)
 
-        val atualizado = usuario.copy(ultimoLogin = agora())
-        salvar(atualizado, tipoDaConta)
-        prefs.edit { putString(CHAVE_SESSAO, atualizado.email) }
-        return ResultadoLogin.Sucesso(atualizado, tipoDaConta)
-    }
-
-    fun usuarioLogado(): Usuario? = prefs.getString(CHAVE_SESSAO, null)?.let { buscarJson(it) }?.let(::paraUsuario)
-
-    fun tipoLogado(): TipoAcesso? = prefs.getString(CHAVE_SESSAO, null)?.let { buscarJson(it) }
-        ?.let { TipoAcesso.doPerfil(it.optLong("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil)) }
+    fun tipoLogado(): TipoAcesso? = sessao()?.let(::tipoDe)
 
     /** Clientes cadastrados, do mais recente para o mais antigo (painel administrativo). */
-    fun clientes(): List<Usuario> = prefs.all
-        .filterKeys { it.startsWith(PREFIXO) }
-        .values.mapNotNull { (it as? String)?.let(::JSONObject) }
-        .filter { TipoAcesso.doPerfil(it.optLong("idPerfil", 1)) == TipoAcesso.CLIENTE }
-        .map(::paraUsuario)
+    suspend fun clientes(): List<Usuario> = usuarios
+        .whereEqualTo("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil)
+        .get().await()
+        .documents.mapNotNull { it.paraJson()?.let(::paraUsuario) }
         .sortedByDescending { it.dataCadastro }
 
     fun sair() {
+        auth.signOut()
         prefs.edit { remove(CHAVE_SESSAO) }
     }
 
-    private fun criar(
-        nome: String, email: String, telefone: String?, cpf: String?, senha: String, tipo: TipoAcesso,
-        agora: String = agora(), id: Long = System.currentTimeMillis()
-    ) {
-        salvar(
-            Usuario(
-                idUsuario = id,
-                nome = nome,
-                email = email.trim().lowercase(),
-                telefone = telefone,
-                cpf = cpf,
-                senhaHash = hash(senha),
-                dataNascimento = null,
-                status = "ATIVO",
-                emailVerificado = false,
-                ultimoLogin = null,
-                dataCadastro = agora,
-                dataAtualizacao = agora
-            ),
-            tipo
+    /** A sessão salva só vale se a conta do Firebase ainda estiver logada (o login dura até tocar em Sair). */
+    private fun sessao(): JSONObject? {
+        val uid = auth.currentUser?.uid ?: return null
+        return prefs.getString(CHAVE_SESSAO, null)?.let(::JSONObject)?.takeIf { it.optString("idUsuario") == uid }
+    }
+
+    private fun guardarSessao(doc: JSONObject) {
+        prefs.edit { putString(CHAVE_SESSAO, doc.toString()) }
+    }
+
+    /** Lê o cadastro; contas criadas pelo console do Firebase ainda não têm documento, então ele é criado aqui (igual ao site). */
+    private suspend fun carregarOuCriar(conta: FirebaseUser, nome: String?, telefone: String?, cpf: String?): JSONObject {
+        val ref = usuarios.document(conta.uid)
+        ref.get().await().paraJson()?.let { return it }
+
+        val email = conta.email.orEmpty()
+        val data = agora()
+        val dados = hashMapOf<String, Any?>(
+            "idUsuario" to conta.uid,
+            "nome" to (nome ?: conta.displayName ?: email.substringBefore('@')),
+            "email" to email,
+            "telefone" to telefone,
+            "cpf" to cpf,
+            "dataNascimento" to null,
+            "status" to "ATIVO",
+            "emailVerificado" to conta.isEmailVerified,
+            "ultimoLogin" to data,
+            "dataCadastro" to data,
+            "dataAtualizacao" to data,
+            "idPerfil" to (if (email.equals(ADMIN_EMAIL, ignoreCase = true)) TipoAcesso.ADMINISTRATIVO else TipoAcesso.CLIENTE).perfil.idPerfil
         )
+        ref.set(dados).await()
+        return JSONObject(dados as Map<*, *>)
     }
 
-    private fun buscarJson(email: String): JSONObject? = prefs.getString(chave(email), null)?.let(::JSONObject)
+    private fun DocumentSnapshot.paraJson(): JSONObject? = data?.let { JSONObject(it as Map<*, *>) }
 
-    private fun salvar(usuario: Usuario, tipo: TipoAcesso) {
-        val json = paraJson(usuario).put("idPerfil", tipo.perfil.idPerfil)
-        prefs.edit { putString(chave(usuario.email), json.toString()) }
-    }
-
-    private fun chave(email: String) = PREFIXO + email.trim().lowercase()
+    private fun tipoDe(j: JSONObject) = TipoAcesso.doPerfil(j.optLong("idPerfil", TipoAcesso.CLIENTE.perfil.idPerfil))
 
     private fun agora() = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date())
 
-    private fun hash(senha: String): String =
-        MessageDigest.getInstance("SHA-256")
-            .digest(senha.toByteArray())
-            .joinToString("") { "%02x".format(it) }
-
-    private fun paraJson(u: Usuario) = JSONObject().apply {
-        put("idUsuario", u.idUsuario)
-        put("nome", u.nome)
-        put("email", u.email)
-        put("telefone", u.telefone ?: JSONObject.NULL)
-        put("cpf", u.cpf ?: JSONObject.NULL)
-        put("senhaHash", u.senhaHash)
-        put("dataNascimento", u.dataNascimento ?: JSONObject.NULL)
-        put("status", u.status)
-        put("emailVerificado", u.emailVerificado)
-        put("ultimoLogin", u.ultimoLogin ?: JSONObject.NULL)
-        put("dataCadastro", u.dataCadastro)
-        put("dataAtualizacao", u.dataAtualizacao)
+    private fun mensagemDeErro(e: Exception): Int = when (e) {
+        is FirebaseNetworkException -> R.string.erro_sem_internet
+        is FirebaseTooManyRequestsException -> R.string.erro_muitas_tentativas
+        is FirebaseAuthInvalidCredentialsException -> R.string.erro_email_invalido
+        else -> R.string.erro_generico
     }
 
     private fun paraUsuario(j: JSONObject) = Usuario(
-        idUsuario = j.getLong("idUsuario"),
+        idUsuario = j.getString("idUsuario"),
         nome = j.getString("nome"),
         email = j.getString("email"),
         telefone = j.textoOuNulo("telefone"),
         cpf = j.textoOuNulo("cpf"),
-        senhaHash = j.getString("senhaHash"),
         dataNascimento = j.textoOuNulo("dataNascimento"),
-        status = j.getString("status"),
-        emailVerificado = j.getBoolean("emailVerificado"),
+        status = j.optString("status", "ATIVO"),
+        emailVerificado = j.optBoolean("emailVerificado"),
         ultimoLogin = j.textoOuNulo("ultimoLogin"),
-        dataCadastro = j.getString("dataCadastro"),
-        dataAtualizacao = j.getString("dataAtualizacao")
+        dataCadastro = j.optString("dataCadastro"),
+        dataAtualizacao = j.optString("dataAtualizacao")
     )
 
     private fun JSONObject.textoOuNulo(campo: String): String? =
         if (has(campo) && !isNull(campo)) getString(campo) else null
 
     companion object {
+        /** Conta da equipe (criada no console do Firebase, nunca pelo app). */
         const val ADMIN_EMAIL = "admin@petlar.com"
-        const val ADMIN_SENHA = "admin123"
-        private const val CHAVE_SESSAO = "sessao_email"
-        private const val PREFIXO = "usuario_"
+        private const val COLECAO = "usuarios"
+        private const val CHAVE_SESSAO = "usuario"
     }
 }

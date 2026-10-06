@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.petshoptcc.R
 import com.example.petshoptcc.data.CarrinhoRepositorio
 import com.example.petshoptcc.data.ItemPedido
@@ -23,6 +24,7 @@ import com.example.petshoptcc.databinding.ItemOpcaoBinding
 import com.example.petshoptcc.util.configurarTela
 import com.example.petshoptcc.util.emReais
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 import kotlin.random.Random
 
 /** Carrinho com as mesmas regras do carrinho.html do site. */
@@ -175,24 +177,40 @@ class Carrinho : AppCompatActivity() {
     private fun finalizarPedido() {
         val resumo = calcularResumo()
         val numero = Random.nextInt(100000, 1000000)
-        val usuario = UsuarioRepositorio(this).usuarioLogado()
-        // TODO: enviar o pedido ao backend quando a API estiver disponível
-        PedidoRepositorio(this).registrar(
-            numero = numero.toLong(),
-            idCliente = usuario?.idUsuario ?: 0,
-            nomeCliente = usuario?.nome.orEmpty(),
-            emailCliente = usuario?.email.orEmpty(),
-            subtotal = resumo.subtotal,
-            desconto = resumo.descontoCupom + resumo.descontoPix,
-            frete = resumo.frete,
-            total = resumo.total,
-            formaPagamento = formasPagamento[pagamento].titulo,
-            itens = carrinho.itens().map { ItemPedido(it.produto.produto.nome, it.quantidade, it.produto.produto.preco) }
-        )
+        val usuario = UsuarioRepositorio(this).usuarioLogado() ?: return finish()
+        binding.btnFinalizar.isEnabled = false
+        binding.btnFinalizar.setText(R.string.aguarde)
+        lifecycleScope.launch {
+            // Vai para o Firestore: aparece no painel administrativo do app e do site
+            val salvou = runCatching {
+                PedidoRepositorio().registrar(
+                    numero = numero.toLong(),
+                    idCliente = usuario.idUsuario,
+                    nomeCliente = usuario.nome,
+                    emailCliente = usuario.email,
+                    subtotal = resumo.subtotal,
+                    desconto = resumo.descontoCupom + resumo.descontoPix,
+                    frete = resumo.frete,
+                    total = resumo.total,
+                    formaPagamento = formasPagamento[pagamento].titulo,
+                    itens = carrinho.itens().map { ItemPedido(it.produto.produto.nome, it.quantidade, it.produto.produto.preco) }
+                )
+            }.isSuccess
+            binding.btnFinalizar.isEnabled = true
+            binding.btnFinalizar.setText(R.string.carrinho_finalizar)
+            if (salvou) {
+                mostrarSucesso(numero, resumo.total)
+            } else {
+                Toast.makeText(this@Carrinho, R.string.pedido_erro, Toast.LENGTH_LONG).show()
+            }
+        }
+    }
+
+    private fun mostrarSucesso(numero: Int, total: Double) {
         carrinho.limpar()
         binding.txtPedidoNumero.text = getString(R.string.pedido_sucesso_texto, numero)
         binding.txtPedidoPagamento.text = getString(R.string.pedido_forma_pagamento, formasPagamento[pagamento].titulo)
-        binding.txtPedidoTotal.text = getString(R.string.pedido_total, resumo.total.emReais())
+        binding.txtPedidoTotal.text = getString(R.string.pedido_total, total.emReais())
         binding.conteudo.isVisible = false
         binding.cartaoVazio.isVisible = false
         binding.cartaoSucesso.isVisible = true

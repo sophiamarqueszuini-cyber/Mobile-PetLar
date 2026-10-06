@@ -2,8 +2,10 @@ package com.example.petshoptcc.activity
 
 import android.content.Intent
 import android.os.Bundle
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import com.example.petshoptcc.R
 import com.example.petshoptcc.data.PedidoRegistrado
 import com.example.petshoptcc.data.PedidoRepositorio
@@ -14,11 +16,14 @@ import com.example.petshoptcc.databinding.ItemContatoBinding
 import com.example.petshoptcc.databinding.ItemIndicadorBinding
 import com.example.petshoptcc.databinding.ItemLinhaValorBinding
 import com.example.petshoptcc.databinding.ItemPedidoAdminBinding
+import com.example.petshoptcc.model.Usuario
 import com.example.petshoptcc.ui.adicionarNaGrade
 import com.example.petshoptcc.util.configurarTela
 import com.example.petshoptcc.util.dataBr
 import com.example.petshoptcc.util.emReais
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 /** Área da equipe: indicadores, pedidos (com troca de status) e clientes cadastrados. */
 class PainelAdmin : AppCompatActivity() {
@@ -40,7 +45,7 @@ class PainelAdmin : AppCompatActivity() {
         binding = ActivityPainelAdminBinding.inflate(layoutInflater)
         setContentView(binding.root)
         configurarTela(binding.main)
-        pedidos = PedidoRepositorio(this)
+        pedidos = PedidoRepositorio()
 
         binding.txtSaudacao.text = getString(R.string.admin_saudacao, admin.nome)
         binding.btnSair.setOnClickListener {
@@ -57,12 +62,19 @@ class PainelAdmin : AppCompatActivity() {
         if (::binding.isInitialized) atualizar()
     }
 
+    /** Lê pedidos e clientes do Firestore (os mesmos do painel do site). */
     private fun atualizar() {
-        val todosPedidos = pedidos.todos()
-        val clientes = usuarios.clientes()
-        montarIndicadores(todosPedidos, clientes.size)
-        montarPedidos(todosPedidos)
-        montarClientes()
+        lifecycleScope.launch {
+            try {
+                val todosPedidos = async { pedidos.todos() }
+                val clientes = async { usuarios.clientes() }
+                montarIndicadores(todosPedidos.await(), clientes.await().size)
+                montarPedidos(todosPedidos.await())
+                montarClientes(clientes.await())
+            } catch (e: Exception) {
+                Toast.makeText(this@PainelAdmin, R.string.admin_erro_carregar, Toast.LENGTH_LONG).show()
+            }
+        }
     }
 
     private fun montarIndicadores(lista: List<PedidoRegistrado>, totalClientes: Int) {
@@ -113,16 +125,21 @@ class PainelAdmin : AppCompatActivity() {
         MaterialAlertDialogBuilder(this)
             .setTitle(getString(R.string.admin_status_titulo, registro.pedido.idPedido))
             .setSingleChoiceItems(opcoes.toTypedArray(), opcoes.indexOf(registro.pedido.status)) { dialogo, i ->
-                pedidos.alterarStatus(registro.pedido.idPedido, opcoes[i])
                 dialogo.dismiss()
-                atualizar()
+                lifecycleScope.launch {
+                    try {
+                        pedidos.alterarStatus(registro.ref, opcoes[i])
+                        atualizar()
+                    } catch (e: Exception) {
+                        Toast.makeText(this@PainelAdmin, R.string.admin_erro_status, Toast.LENGTH_LONG).show()
+                    }
+                }
             }
             .setNegativeButton(R.string.cancelar, null)
             .show()
     }
 
-    private fun montarClientes() {
-        val clientes = usuarios.clientes()
+    private fun montarClientes(clientes: List<Usuario>) {
         binding.listaClientes.removeAllViews()
         binding.cartaoClientes.isVisible = clientes.isNotEmpty()
         binding.txtSemClientes.isVisible = clientes.isEmpty()

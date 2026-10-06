@@ -6,10 +6,13 @@ import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.petshoptcc.R
+import com.example.petshoptcc.data.ResultadoCadastro
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityCadastroBinding
 import com.example.petshoptcc.util.configurarTela
+import kotlinx.coroutines.launch
 
 class Cadastro : AppCompatActivity() {
 
@@ -37,6 +40,7 @@ class Cadastro : AppCompatActivity() {
     }
 
     private fun cadastrar() {
+        if (!binding.btnCadastrar.isEnabled) return // já está enviando (ex.: Enter + toque no botão)
         val nome = binding.edtNome.text?.toString()?.trim().orEmpty()
         val email = binding.edtEmail.text?.toString()?.trim().orEmpty()
         val telefone = binding.edtTelefone.text?.toString().orEmpty().filter(Char::isDigit)
@@ -48,7 +52,6 @@ class Cadastro : AppCompatActivity() {
         binding.layoutEmail.error = when {
             email.isEmpty() -> getString(R.string.erro_email_vazio)
             !Patterns.EMAIL_ADDRESS.matcher(email).matches() -> getString(R.string.erro_email_invalido)
-            repositorio.emailCadastrado(email) -> getString(R.string.erro_email_em_uso)
             else -> null
         }
         binding.layoutTelefone.error =
@@ -69,18 +72,29 @@ class Cadastro : AppCompatActivity() {
         )
         if (campos.any { it.error != null }) return
 
-        repositorio.cadastrar(
-            nome = nome,
-            email = email,
-            telefone = telefone.ifEmpty { null },
-            cpf = cpf.ifEmpty { null },
-            senha = senha
-        )
-        repositorio.entrar(email, senha)
-        Toast.makeText(this, R.string.cadastro_sucesso, Toast.LENGTH_SHORT).show()
-        startActivity(
-            Intent(this, MainActivity::class.java)
-                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-        )
+        binding.btnCadastrar.isEnabled = false
+        binding.btnCadastrar.setText(R.string.aguarde)
+        lifecycleScope.launch {
+            val resultado = repositorio.cadastrar(
+                nome = nome,
+                email = email,
+                telefone = telefone.ifEmpty { null },
+                cpf = cpf.ifEmpty { null },
+                senha = senha
+            )
+            binding.btnCadastrar.isEnabled = true
+            binding.btnCadastrar.setText(R.string.cadastro_botao)
+            when (resultado) {
+                is ResultadoCadastro.Sucesso -> {
+                    Toast.makeText(this@Cadastro, R.string.cadastro_sucesso, Toast.LENGTH_SHORT).show()
+                    startActivity(
+                        Intent(this@Cadastro, MainActivity::class.java)
+                            .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+                    )
+                }
+                ResultadoCadastro.EmailEmUso -> binding.layoutEmail.error = getString(R.string.erro_email_em_uso)
+                is ResultadoCadastro.Falha -> binding.layoutConfirmarSenha.error = getString(resultado.mensagem)
+            }
+        }
     }
 }

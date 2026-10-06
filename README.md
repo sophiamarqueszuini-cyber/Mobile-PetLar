@@ -3,7 +3,11 @@
 Aplicativo Android do **PetLar**, com o design do site PetLar Sanctuary.
 Tem vitrine de produtos, carrinho, cadastro e login de clientes, perfil com endereços e um painel administrativo para a equipe.
 
-Os dados (usuários, carrinho e pedidos) ficam salvos no próprio aparelho. Não é preciso configurar servidor nem banco de dados.
+As contas e os pedidos ficam online no **Firebase**, no mesmo projeto do [site PetLar](https://sophiamarqueszuini-cyber.github.io/Petshop---PetLar/):
+- a mesma conta entra no app e no site;
+- um pedido feito no app aparece no painel administrativo do site, e vice-versa.
+
+Só o carrinho fica salvo no aparelho. O app precisa de internet para entrar, cadastrar e finalizar pedidos.
 
 [![Testar online no Appetize](https://img.shields.io/badge/▶_Testar_online-Appetize.io-8B5A2B?style=for-the-badge)](https://appetize.io/app/b_tzjh7ovdokzdpdbrdgfz722d2q)
 
@@ -11,20 +15,16 @@ Clique no botão acima para abrir o app direto no navegador. Não precisa instal
 
 ## Conta administrativa
 
-| Login | Senha |
-|---|---|
-| `admin@petlar.com` | `admin123` |
+A conta da equipe é `admin@petlar.com`, com a **mesma senha do site**. Ela é criada no Console do Firebase (Authentication), nunca pelo app.
 
-O login é um só: com a conta administrativa, o app abre direto o painel da equipe.
-Para entrar como **cliente**, crie uma conta pela tela de cadastro do app ou use um dos clientes de exemplo.
+O login é um só: com a conta administrativa, o app abre direto o painel da equipe, com os pedidos e os clientes do Firebase.
+Para entrar como **cliente**, crie uma conta pela tela de cadastro do app ou use uma conta já criada no site.
 
-### Dados de exemplo
+### Firebase
 
-Na primeira vez que abre, o app cadastra 6 clientes e 8 pedidos de exemplo (com status variados), para o painel administrativo não começar vazio. Todos os clientes de exemplo usam a senha `cliente123`:
-
-`mariana.costa@email.com` · `rafael.almeida@email.com` · `juliana.ferreira@email.com` · `lucas.oliveira@email.com` · `beatriz.santos@email.com` · `pedro.lima@email.com`
-
-Os exemplos ficam em [`DadosExemplo.kt`](app/src/main/java/com/example/petshoptcc/data/DadosExemplo.kt).
+- O app está registrado no projeto `petlar-263e9` como **PetLar App** (pacote `com.example.petshoptcc`). Os dados de conexão ficam em [`PetLarApp.kt`](app/src/main/java/com/example/petshoptcc/PetLarApp.kt).
+- **Authentication** guarda e-mail e senha. O **Firestore** guarda os clientes (coleção `usuarios`) e os pedidos (coleção `pedidos`).
+- As regras de segurança ficam no `firestore.rules` do repositório do site.
 
 ---
 
@@ -49,7 +49,7 @@ O plano gratuito tem limite de minutos por mês.
 3. Se aparecer um aviso de segurança, toque em **Configurações** e ative **Permitir desta fonte**.
 4. Toque em **Instalar**. Se o Play Protect avisar, toque em **Mais detalhes → Instalar mesmo assim**. O aviso é normal para APK de teste.
 
-Se o celular já tiver uma versão anterior do PetLar, desinstale-a antes. A versão 1.1 foi assinada com outra chave e não instala por cima.
+Quem tem a versão 1.1 pode instalar a 1.2 por cima. Se tiver uma versão anterior à 1.1, desinstale-a antes, porque ela foi assinada com outra chave.
 
 Requer Android 7.0 ou superior.
 

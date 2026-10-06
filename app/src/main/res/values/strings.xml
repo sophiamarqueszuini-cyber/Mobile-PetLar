@@ -28,6 +28,13 @@
     <string name="erro_senha_curta">A senha deve ter pelo menos 6 caracteres</string>
     <string name="erro_senhas_diferentes">As senhas não coincidem</string>
     <string name="erro_login">E-mail ou senha incorretos</string>
+    <string name="erro_sem_internet">Sem conexão com a internet</string>
+    <string name="erro_muitas_tentativas">Muitas tentativas. Aguarde alguns minutos e tente de novo</string>
+    <string name="erro_generico">Não foi possível concluir. Tente novamente</string>
+    <string name="aguarde">Aguarde...</string>
+    <string name="pedido_erro">Não foi possível finalizar o pedido. Confira a internet e tente de novo.</string>
+    <string name="admin_erro_carregar">Não foi possível carregar os pedidos e os clientes. Confira a internet.</string>
+    <string name="admin_erro_status">Não foi possível alterar o status. Tente de novo.</string>
 
     <!-- Login -->
     <string name="login_titulo">Bem-vindo(a) ao seu refúgio</string>

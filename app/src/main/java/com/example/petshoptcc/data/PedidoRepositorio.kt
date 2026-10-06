@@ -1,10 +1,10 @@
 package com.example.petshoptcc.data
 
-import android.content.Context
-import androidx.core.content.edit
 import com.example.petshoptcc.model.Pedido
-import org.json.JSONArray
-import org.json.JSONObject
+import com.google.firebase.firestore.DocumentSnapshot
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
+import kotlinx.coroutines.tasks.await
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
@@ -14,8 +14,9 @@ class ItemPedido(val nome: String, val quantidade: Int, val precoUnitario: Doubl
     val subtotal: Double get() = precoUnitario * quantidade
 }
 
-/** Pedido com os dados que o painel administrativo mostra junto (cliente, pagamento, itens). */
+/** Pedido com os dados que o painel administrativo mostra junto (cliente, pagamento, itens). [ref] é o id do documento no Firestore. */
 class PedidoRegistrado(
+    val ref: String,
     val pedido: Pedido,
     val nomeCliente: String,
     val emailCliente: String,
@@ -24,15 +25,17 @@ class PedidoRegistrado(
     val itens: List<ItemPedido>
 )
 
-/** Pedidos finalizados no carrinho, salvos no aparelho enquanto não há backend. */
-class PedidoRepositorio(context: Context) {
+/**
+ * Pedidos finalizados no carrinho, na coleção "pedidos" do Firestore: os mesmos do site,
+ * então o painel administrativo mostra as compras feitas no app e no site.
+ */
+class PedidoRepositorio {
 
-    private val prefs = context.applicationContext
-        .getSharedPreferences("pedidos", Context.MODE_PRIVATE)
+    private val pedidos = FirebaseFirestore.getInstance().collection(COLECAO)
 
-    fun registrar(
+    suspend fun registrar(
         numero: Long,
-        idCliente: Long,
+        idCliente: String,
         nomeCliente: String,
         emailCliente: String,
         subtotal: Double,
@@ -42,98 +45,70 @@ class PedidoRepositorio(context: Context) {
         formaPagamento: String,
         itens: List<ItemPedido>
     ) {
-        val pedido = Pedido(
-            idPedido = numero,
-            idCliente = idCliente,
-            idEndereco = 0, // retirada/entrega ainda sem cadastro de endereço
-            dataPedido = SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date()),
-            subtotal = subtotal,
-            desconto = desconto,
-            frete = frete,
-            total = total,
-            status = STATUS.first()
+        val dados = hashMapOf(
+            "idPedido" to numero,
+            "idCliente" to idCliente,
+            "idEndereco" to 0L, // retirada/entrega ainda sem cadastro de endereço
+            "dataPedido" to SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.US).format(Date()),
+            "subtotal" to subtotal,
+            "desconto" to desconto,
+            "frete" to frete,
+            "total" to total,
+            "status" to STATUS.first(),
+            "nomeCliente" to nomeCliente,
+            "emailCliente" to emailCliente,
+            "formaPagamento" to formaPagamento,
+            "quantidadeItens" to itens.sumOf { it.quantidade },
+            "itens" to itens.map {
+                mapOf("nome" to it.nome, "quantidade" to it.quantidade, "precoUnitario" to it.precoUnitario)
+            }
         )
-        salvar(listOf(PedidoRegistrado(pedido, nomeCliente, emailCliente, formaPagamento, itens.sumOf { it.quantidade }, itens)) + todos())
+        pedidos.add(dados).await()
     }
 
-    /** Todos os pedidos, do mais recente para o mais antigo. */
-    fun todos(): List<PedidoRegistrado> {
-        val lista = JSONArray(prefs.getString(CHAVE, null) ?: "[]")
-        return (0 until lista.length()).map { paraPedido(lista.getJSONObject(it)) }
+    /** Todos os pedidos, do mais recente para o mais antigo (só a equipe tem permissão). */
+    suspend fun todos(): List<PedidoRegistrado> = pedidos
+        .orderBy("dataPedido", Query.Direction.DESCENDING)
+        .get().await()
+        .documents.map(::paraPedido)
+
+    suspend fun alterarStatus(ref: String, status: String) {
+        pedidos.document(ref).update("status", status).await()
     }
 
-    /** Pedidos de demonstração (ver [DadosExemplo]), mantendo a lista do mais recente para o mais antigo. */
-    fun adicionarExemplos(exemplos: List<PedidoRegistrado>) {
-        salvar((todos() + exemplos).sortedByDescending { it.pedido.dataPedido })
-    }
+    /** Números do Firestore podem vir como Long ou Double (o site grava 120 como inteiro). */
+    private fun DocumentSnapshot.numero(campo: String): Double = (get(campo) as? Number)?.toDouble() ?: 0.0
 
-    fun alterarStatus(idPedido: Long, status: String) {
-        salvar(todos().map {
-            if (it.pedido.idPedido == idPedido) {
-                PedidoRegistrado(it.pedido.copy(status = status), it.nomeCliente, it.emailCliente, it.formaPagamento, it.quantidadeItens, it.itens)
-            } else it
-        })
-    }
-
-    private fun salvar(pedidos: List<PedidoRegistrado>) {
-        val lista = JSONArray()
-        pedidos.forEach { lista.put(paraJson(it)) }
-        prefs.edit { putString(CHAVE, lista.toString()) }
-    }
-
-    private fun paraJson(r: PedidoRegistrado) = JSONObject().apply {
-        put("idPedido", r.pedido.idPedido)
-        put("idCliente", r.pedido.idCliente)
-        put("idEndereco", r.pedido.idEndereco)
-        put("dataPedido", r.pedido.dataPedido)
-        put("subtotal", r.pedido.subtotal)
-        put("desconto", r.pedido.desconto)
-        put("frete", r.pedido.frete)
-        put("total", r.pedido.total)
-        put("status", r.pedido.status)
-        put("nomeCliente", r.nomeCliente)
-        put("emailCliente", r.emailCliente)
-        put("formaPagamento", r.formaPagamento)
-        put("quantidadeItens", r.quantidadeItens)
-        put("itens", JSONArray().apply {
-            r.itens.forEach { item ->
-                put(JSONObject().apply {
-                    put("nome", item.nome)
-                    put("quantidade", item.quantidade)
-                    put("precoUnitario", item.precoUnitario)
-                })
-            }
-        })
-    }
-
-    private fun paraPedido(j: JSONObject) = PedidoRegistrado(
+    private fun paraPedido(d: DocumentSnapshot) = PedidoRegistrado(
+        ref = d.id,
         pedido = Pedido(
-            idPedido = j.getLong("idPedido"),
-            idCliente = j.getLong("idCliente"),
-            idEndereco = j.getLong("idEndereco"),
-            dataPedido = j.getString("dataPedido"),
-            subtotal = j.getDouble("subtotal"),
-            desconto = j.getDouble("desconto"),
-            frete = j.getDouble("frete"),
-            total = j.getDouble("total"),
-            status = j.getString("status")
+            idPedido = d.numero("idPedido").toLong(),
+            idCliente = d.getString("idCliente").orEmpty(),
+            idEndereco = d.numero("idEndereco").toLong(),
+            dataPedido = d.getString("dataPedido").orEmpty(),
+            subtotal = d.numero("subtotal"),
+            desconto = d.numero("desconto"),
+            frete = d.numero("frete"),
+            total = d.numero("total"),
+            status = d.getString("status") ?: STATUS.first()
         ),
-        nomeCliente = j.getString("nomeCliente"),
-        emailCliente = j.getString("emailCliente"),
-        formaPagamento = j.getString("formaPagamento"),
-        quantidadeItens = j.getInt("quantidadeItens"),
-        // Pedidos gravados antes desta versão não têm a lista de itens
-        itens = j.optJSONArray("itens")?.let { lista ->
-            (0 until lista.length()).map {
-                val item = lista.getJSONObject(it)
-                ItemPedido(item.getString("nome"), item.getInt("quantidade"), item.getDouble("precoUnitario"))
-            }
-        }.orEmpty()
+        nomeCliente = d.getString("nomeCliente").orEmpty(),
+        emailCliente = d.getString("emailCliente").orEmpty(),
+        formaPagamento = d.getString("formaPagamento").orEmpty(),
+        quantidadeItens = d.numero("quantidadeItens").toInt(),
+        itens = (d.get("itens") as? List<*>).orEmpty().mapNotNull { item ->
+            val m = item as? Map<*, *> ?: return@mapNotNull null
+            ItemPedido(
+                nome = m["nome"] as? String ?: return@mapNotNull null,
+                quantidade = (m["quantidade"] as? Number)?.toInt() ?: 1,
+                precoUnitario = (m["precoUnitario"] as? Number)?.toDouble() ?: 0.0
+            )
+        }
     )
 
     companion object {
-        /** Etapas do pedido, na ordem. */
+        /** Etapas do pedido, na ordem (as mesmas do site e das regras do Firestore). */
         val STATUS = listOf("Pagamento confirmado", "Em separação", "Enviado", "Entregue", "Cancelado")
-        private const val CHAVE = "pedidos"
+        private const val COLECAO = "pedidos"
     }
 }

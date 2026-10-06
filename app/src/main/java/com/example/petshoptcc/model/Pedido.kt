@@ -2,7 +2,7 @@ package com.example.petshoptcc.model
 
 data class Pedido(
     val idPedido: Long,
-    val idCliente: Long,
+    val idCliente: String,
     val idEndereco: Long,
     val dataPedido: String,
     val subtotal: Double,

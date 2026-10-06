@@ -4,10 +4,13 @@ import android.os.Bundle
 import android.util.Patterns
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
 import com.example.petshoptcc.R
+import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityRecuperarSenhaBinding
 import com.example.petshoptcc.util.configurarTela
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
+import kotlinx.coroutines.launch
 
 class RecuperarSenha : AppCompatActivity() {
 
@@ -33,6 +36,7 @@ class RecuperarSenha : AppCompatActivity() {
     }
 
     private fun enviar() {
+        if (!binding.btnEnviar.isEnabled) return // já está enviando (ex.: Enter + toque no botão)
         val email = binding.edtEmail.text?.toString()?.trim().orEmpty()
         binding.layoutEmail.error = when {
             email.isEmpty() -> getString(R.string.erro_email_vazio)
@@ -41,13 +45,23 @@ class RecuperarSenha : AppCompatActivity() {
         }
         if (binding.layoutEmail.error != null) return
 
-        // TODO: pedir ao backend o envio do e-mail de redefinição quando a API estiver disponível
-        MaterialAlertDialogBuilder(this)
-            .setTitle(R.string.recuperar_dialogo_titulo)
-            .setMessage(getString(R.string.recuperar_dialogo_mensagem, email))
-            .setPositiveButton(R.string.ok) { _, _ -> finish() }
-            .setCancelable(false)
-            .show()
+        binding.btnEnviar.isEnabled = false
+        binding.btnEnviar.setText(R.string.aguarde)
+        lifecycleScope.launch {
+            val erro = UsuarioRepositorio(this@RecuperarSenha).recuperarSenha(email)
+            binding.btnEnviar.isEnabled = true
+            binding.btnEnviar.setText(R.string.recuperar_botao)
+            if (erro != null) {
+                binding.layoutEmail.error = getString(erro)
+                return@launch
+            }
+            MaterialAlertDialogBuilder(this@RecuperarSenha)
+                .setTitle(R.string.recuperar_dialogo_titulo)
+                .setMessage(getString(R.string.recuperar_dialogo_mensagem, email))
+                .setPositiveButton(R.string.ok) { _, _ -> finish() }
+                .setCancelable(false)
+                .show()
+        }
     }
 
     companion object {
