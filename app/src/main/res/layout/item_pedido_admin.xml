@@ -62,6 +62,14 @@
             android:textSize="14sp"
             tools:text="28/09/2026 12:05 · 3 itens · ⚡ PIX" />
 
+        <!-- Produtos do pedido (uma linha item_linha_valor por produto) -->
+        <LinearLayout
+            android:id="@+id/listaItens"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:orientation="vertical" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

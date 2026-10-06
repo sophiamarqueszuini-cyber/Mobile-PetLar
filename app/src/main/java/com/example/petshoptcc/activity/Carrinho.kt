@@ -13,6 +13,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.core.view.isVisible
 import com.example.petshoptcc.R
 import com.example.petshoptcc.data.CarrinhoRepositorio
+import com.example.petshoptcc.data.ItemPedido
 import com.example.petshoptcc.data.PedidoRepositorio
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityCarrinhoBinding
@@ -186,7 +187,7 @@ class Carrinho : AppCompatActivity() {
             frete = resumo.frete,
             total = resumo.total,
             formaPagamento = formasPagamento[pagamento].titulo,
-            quantidadeItens = carrinho.totalItens()
+            itens = carrinho.itens().map { ItemPedido(it.produto.produto.nome, it.quantidade, it.produto.produto.preco) }
         )
         carrinho.limpar()
         binding.txtPedidoNumero.text = getString(R.string.pedido_sucesso_texto, numero)

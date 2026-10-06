@@ -12,6 +12,7 @@ import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityPainelAdminBinding
 import com.example.petshoptcc.databinding.ItemContatoBinding
 import com.example.petshoptcc.databinding.ItemIndicadorBinding
+import com.example.petshoptcc.databinding.ItemLinhaValorBinding
 import com.example.petshoptcc.databinding.ItemPedidoAdminBinding
 import com.example.petshoptcc.ui.adicionarNaGrade
 import com.example.petshoptcc.util.configurarTela
@@ -97,6 +98,11 @@ class PainelAdmin : AppCompatActivity() {
                 R.plurals.admin_pedido_detalhes, registro.quantidadeItens,
                 p.dataPedido.dataBr(), registro.quantidadeItens, registro.formaPagamento
             )
+            registro.itens.forEach { item ->
+                val linha = ItemLinhaValorBinding.inflate(layoutInflater, cartao.listaItens, true)
+                linha.txtRotulo.text = getString(R.string.admin_pedido_item, item.quantidade, item.nome)
+                linha.txtValor.text = item.subtotal.emReais()
+            }
             cartao.txtTotal.text = p.total.emReais()
             cartao.btnStatus.setOnClickListener { escolherStatus(registro) }
         }

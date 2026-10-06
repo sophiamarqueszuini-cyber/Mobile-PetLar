@@ -9,13 +9,19 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
+/** Produto comprado, com nome e preço do momento da compra. */
+class ItemPedido(val nome: String, val quantidade: Int, val precoUnitario: Double) {
+    val subtotal: Double get() = precoUnitario * quantidade
+}
+
 /** Pedido com os dados que o painel administrativo mostra junto (cliente, pagamento, itens). */
 class PedidoRegistrado(
     val pedido: Pedido,
     val nomeCliente: String,
     val emailCliente: String,
     val formaPagamento: String,
-    val quantidadeItens: Int
+    val quantidadeItens: Int,
+    val itens: List<ItemPedido>
 )
 
 /** Pedidos finalizados no carrinho, salvos no aparelho enquanto não há backend. */
@@ -34,7 +40,7 @@ class PedidoRepositorio(context: Context) {
         frete: Double,
         total: Double,
         formaPagamento: String,
-        quantidadeItens: Int
+        itens: List<ItemPedido>
     ) {
         val pedido = Pedido(
             idPedido = numero,
@@ -47,7 +53,7 @@ class PedidoRepositorio(context: Context) {
             total = total,
             status = STATUS.first()
         )
-        salvar(listOf(PedidoRegistrado(pedido, nomeCliente, emailCliente, formaPagamento, quantidadeItens)) + todos())
+        salvar(listOf(PedidoRegistrado(pedido, nomeCliente, emailCliente, formaPagamento, itens.sumOf { it.quantidade }, itens)) + todos())
     }
 
     /** Todos os pedidos, do mais recente para o mais antigo. */
@@ -64,7 +70,7 @@ class PedidoRepositorio(context: Context) {
     fun alterarStatus(idPedido: Long, status: String) {
         salvar(todos().map {
             if (it.pedido.idPedido == idPedido) {
-                PedidoRegistrado(it.pedido.copy(status = status), it.nomeCliente, it.emailCliente, it.formaPagamento, it.quantidadeItens)
+                PedidoRegistrado(it.pedido.copy(status = status), it.nomeCliente, it.emailCliente, it.formaPagamento, it.quantidadeItens, it.itens)
             } else it
         })
     }
@@ -89,6 +95,15 @@ class PedidoRepositorio(context: Context) {
         put("emailCliente", r.emailCliente)
         put("formaPagamento", r.formaPagamento)
         put("quantidadeItens", r.quantidadeItens)
+        put("itens", JSONArray().apply {
+            r.itens.forEach { item ->
+                put(JSONObject().apply {
+                    put("nome", item.nome)
+                    put("quantidade", item.quantidade)
+                    put("precoUnitario", item.precoUnitario)
+                })
+            }
+        })
     }
 
     private fun paraPedido(j: JSONObject) = PedidoRegistrado(
@@ -106,7 +121,14 @@ class PedidoRepositorio(context: Context) {
         nomeCliente = j.getString("nomeCliente"),
         emailCliente = j.getString("emailCliente"),
         formaPagamento = j.getString("formaPagamento"),
-        quantidadeItens = j.getInt("quantidadeItens")
+        quantidadeItens = j.getInt("quantidadeItens"),
+        // Pedidos gravados antes desta versão não têm a lista de itens
+        itens = j.optJSONArray("itens")?.let { lista ->
+            (0 until lista.length()).map {
+                val item = lista.getJSONObject(it)
+                ItemPedido(item.getString("nome"), item.getInt("quantidade"), item.getDouble("precoUnitario"))
+            }
+        }.orEmpty()
     )
 
     companion object {

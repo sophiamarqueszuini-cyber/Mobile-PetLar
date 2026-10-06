@@ -77,7 +77,11 @@ object DadosExemplo {
         // Pedido só entra se o cliente foi criado agora (e-mail ainda não existia no aparelho)
         PedidoRepositorio(context).adicionarExemplos(pedidos.mapNotNull { p ->
             val cliente = cadastrados[p.idCliente] ?: return@mapNotNull null
-            val subtotal = p.itens.entries.sumOf { (id, qtd) -> Catalogo.produtos.first { it.produto.idProduto == id }.produto.preco * qtd }
+            val itens = p.itens.map { (id, qtd) ->
+                val produto = Catalogo.produtos.first { it.produto.idProduto == id }.produto
+                ItemPedido(produto.nome, qtd, produto.preco)
+            }
+            val subtotal = itens.sumOf { it.subtotal }
             val descontoCupom = if (p.cupom) subtotal * 0.10 else 0.0
             val descontoPix = if (p.pagamento == PIX) (subtotal - descontoCupom) * 0.05 else 0.0
             val desconto = centavos(descontoCupom + descontoPix)
@@ -96,7 +100,8 @@ object DadosExemplo {
                 nomeCliente = cliente.nome,
                 emailCliente = cliente.email,
                 formaPagamento = formasPagamento[p.pagamento],
-                quantidadeItens = p.itens.values.sum()
+                quantidadeItens = p.itens.values.sum(),
+                itens = itens
             )
         })
 
