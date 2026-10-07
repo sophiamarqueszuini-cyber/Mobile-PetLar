@@ -1,12 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Indicador do painel (mesmo cartão do .stat-item) -->
+<!-- .cartao.indicador do painel administrativo -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.PetLar.Card.Arredondado"
+    style="@style/Widget.PetLar.Card.Painel"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    app:contentPadding="18dp">
+    android:layout_height="wrap_content">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -17,18 +15,22 @@
             android:id="@+id/txtValor"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/zilla_slab_semibold"
+            android:fontFamily="@font/zilla_slab_regular"
+            android:maxLines="1"
             android:textColor="@color/petlar_marrom"
-            android:textSize="24sp"
+            android:textSize="@dimen/painel_indicador_valor"
             tools:text="R$ 1.250,00" />
 
         <TextView
             android:id="@+id/txtRotulo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textAppearance="@style/TextAppearance.PetLar.Tag"
-            android:textSize="11sp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/zilla_slab_regular"
+            android:letterSpacing="0.17"
+            android:textAllCaps="true"
+            android:textColor="@color/petlar_texto_secundario"
+            android:textSize="12sp"
             tools:text="Faturamento" />
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

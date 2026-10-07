@@ -100,8 +100,9 @@
     <string name="cartao_titulo">Leve o PetLar no bolso</string>
     <string name="cartao_texto">Um cartão que vira. A frente carrega a marca; o verso, todos os caminhos para falar com a gente — toque para descobrir.</string>
     <string name="cartao_instrucao">Toque no cartão para virar</string>
-    <string name="cartao_verso_titulo">Fale com a gente</string>
-    <string name="cartao_endereco">Endereço</string>
+    <string name="cartao_verso_titulo">Acesse nosso cartão</string>
+    <string name="cartao_qr_instrucao">Aponte a câmera para o QR Code</string>
+    <string name="cartao_qr_descricao">QR Code PetLar</string>
 
     <string name="rodape_direitos">© Copyright — Todos os direitos reservados</string>
     <string name="rodape_contato">Contato &amp; Redes</string>

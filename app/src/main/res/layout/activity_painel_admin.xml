@@ -88,7 +88,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="@string/admin_pedidos_tag"
-                android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+                android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -97,20 +97,22 @@
                 android:layout_marginBottom="18dp"
                 android:text="@string/admin_pedidos_titulo"
                 android:textAppearance="@style/TextAppearance.PetLar.Titulo"
-                android:textSize="24sp" />
+                android:textSize="27sp" />
 
-            <LinearLayout
+            <!-- .lista-pedidos: uma coluna no celular em pé, duas na horizontal -->
+            <GridLayout
                 android:id="@+id/listaPedidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical" />
+                android:layout_marginHorizontal="-6dp"
+                android:columnCount="@integer/colunas_galeria" />
 
             <TextView
                 android:id="@+id/txtSemPedidos"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="@string/admin_sem_pedidos"
-                android:textAppearance="@style/TextAppearance.PetLar.Citacao"
+                android:textAppearance="@style/TextAppearance.PetLar.Corpo"
                 android:visibility="gone" />
 
             <!-- CLIENTES -->
@@ -119,7 +121,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
                 android:text="@string/admin_clientes_tag"
-                android:textAppearance="@style/TextAppearance.PetLar.Tag" />
+                android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada" />
 
             <TextView
                 android:layout_width="match_parent"
@@ -128,32 +130,40 @@
                 android:layout_marginBottom="18dp"
                 android:text="@string/admin_clientes_titulo"
                 android:textAppearance="@style/TextAppearance.PetLar.Titulo"
-                android:textSize="24sp" />
+                android:textSize="27sp" />
 
+            <!-- .cartao com as .cliente-linha -->
             <com.google.android.material.card.MaterialCardView
                 android:id="@+id/cartaoClientes"
-                style="@style/Widget.PetLar.Card.Arredondado"
+                style="@style/Widget.PetLar.Card.Painel"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                app:contentPaddingBottom="4dp"
-                app:contentPaddingLeft="18dp"
-                app:contentPaddingRight="18dp"
-                app:contentPaddingTop="4dp">
+                app:contentPaddingBottom="8dp"
+                app:contentPaddingTop="8dp">
 
                 <LinearLayout
-                    android:id="@+id/listaClientes"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical" />
-            </com.google.android.material.card.MaterialCardView>
+                    android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/txtSemClientes"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="@string/admin_sem_clientes"
-                android:textAppearance="@style/TextAppearance.PetLar.Citacao"
-                android:visibility="gone" />
+                    <LinearLayout
+                        android:id="@+id/listaClientes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:divider="@drawable/divisor_painel"
+                        android:orientation="vertical"
+                        android:showDividers="middle" />
+
+                    <TextView
+                        android:id="@+id/txtSemClientes"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginVertical="14dp"
+                        android:text="@string/admin_sem_clientes"
+                        android:textAppearance="@style/TextAppearance.PetLar.Corpo"
+                        android:visibility="gone" />
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
         </LinearLayout>
     </ScrollView>
 </LinearLayout>

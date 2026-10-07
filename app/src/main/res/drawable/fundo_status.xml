@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Selo de status do pedido no painel -->
+<!-- Selo de status do pedido no painel (a cor vem do backgroundTint de cada status) -->
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-    <solid android:color="@color/petlar_bege" />
-    <corners android:radius="12dp" />
+    <solid android:color="@color/status_fundo" />
+    <corners android:radius="999dp" />
 </shape>

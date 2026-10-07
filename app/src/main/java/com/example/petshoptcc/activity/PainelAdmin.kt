@@ -1,9 +1,11 @@
 package com.example.petshoptcc.activity
 
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.lifecycle.lifecycleScope
 import com.example.petshoptcc.R
@@ -12,10 +14,10 @@ import com.example.petshoptcc.data.PedidoRepositorio
 import com.example.petshoptcc.data.TipoAcesso
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityPainelAdminBinding
-import com.example.petshoptcc.databinding.ItemContatoBinding
+import com.example.petshoptcc.databinding.ItemClienteAdminBinding
 import com.example.petshoptcc.databinding.ItemIndicadorBinding
-import com.example.petshoptcc.databinding.ItemLinhaValorBinding
 import com.example.petshoptcc.databinding.ItemPedidoAdminBinding
+import com.example.petshoptcc.databinding.ItemProdutoPedidoBinding
 import com.example.petshoptcc.model.Usuario
 import com.example.petshoptcc.ui.adicionarNaGrade
 import com.example.petshoptcc.util.configurarTela
@@ -108,22 +110,36 @@ class PainelAdmin : AppCompatActivity() {
         binding.txtSemPedidos.isVisible = lista.isEmpty()
         lista.forEach { registro ->
             val p = registro.pedido
-            val cartao = ItemPedidoAdminBinding.inflate(layoutInflater, binding.listaPedidos, true)
+            val cartao = ItemPedidoAdminBinding.inflate(layoutInflater, binding.listaPedidos, false)
             cartao.txtNumero.text = getString(R.string.admin_pedido_numero, p.idPedido)
             cartao.txtStatus.text = p.status
+            pintarStatus(cartao, p.status)
             cartao.txtCliente.text = getString(R.string.admin_pedido_cliente, registro.nomeCliente, registro.emailCliente)
             cartao.txtDetalhes.text = resources.getQuantityString(
                 R.plurals.admin_pedido_detalhes, registro.quantidadeItens,
                 p.dataPedido.dataBr(), registro.quantidadeItens, registro.formaPagamento
             )
+            cartao.listaItens.isVisible = registro.itens.isNotEmpty()
             registro.itens.forEach { item ->
-                val linha = ItemLinhaValorBinding.inflate(layoutInflater, cartao.listaItens, true)
-                linha.txtRotulo.text = getString(R.string.admin_pedido_item, item.quantidade, item.nome)
-                linha.txtValor.text = item.subtotal.emReais()
+                val linha = ItemProdutoPedidoBinding.inflate(layoutInflater, cartao.listaItens, true)
+                linha.txtProduto.text = getString(R.string.admin_pedido_item, item.quantidade, item.nome)
+                linha.txtSubtotal.text = item.subtotal.emReais()
             }
             cartao.txtTotal.text = p.total.emReais()
             cartao.btnStatus.setOnClickListener { escolherStatus(registro) }
+            binding.listaPedidos.adicionarNaGrade(cartao.root)
         }
+    }
+
+    /** Selo bege; vermelho para cancelado e verde para entregue, como no site. */
+    private fun pintarStatus(cartao: ItemPedidoAdminBinding, status: String) {
+        val (fundo, texto) = when (status) {
+            STATUS_CANCELADO -> R.color.status_cancelado_fundo to R.color.status_cancelado_texto
+            STATUS_ENTREGUE -> R.color.status_entregue_fundo to R.color.status_entregue_texto
+            else -> R.color.status_fundo to R.color.status_texto
+        }
+        cartao.txtStatus.backgroundTintList = ColorStateList.valueOf(ContextCompat.getColor(this, fundo))
+        cartao.txtStatus.setTextColor(ContextCompat.getColor(this, texto))
     }
 
     private fun escolherStatus(registro: PedidoRegistrado) {
@@ -147,21 +163,16 @@ class PainelAdmin : AppCompatActivity() {
 
     private fun montarClientes(clientes: List<Usuario>) {
         binding.listaClientes.removeAllViews()
-        binding.cartaoClientes.isVisible = clientes.isNotEmpty()
         binding.txtSemClientes.isVisible = clientes.isEmpty()
         clientes.forEach { cliente ->
-            val linha = ItemContatoBinding.inflate(layoutInflater, binding.listaClientes, true)
-            linha.txtCanal.text = cliente.nome
-            linha.txtValor.text = getString(R.string.admin_cliente_desde, cliente.email, cliente.dataCadastro.dataBr(comHora = false))
-            val negrito = linha.txtValor.typeface
-            linha.txtValor.typeface = linha.txtCanal.typeface
-            linha.txtCanal.typeface = negrito
-            linha.txtCanal.isAllCaps = false
-            linha.txtSeta.isVisible = false
+            val linha = ItemClienteAdminBinding.inflate(layoutInflater, binding.listaClientes, true)
+            linha.txtNome.text = cliente.nome
+            linha.txtDetalhes.text = getString(R.string.admin_cliente_desde, cliente.email, cliente.dataCadastro.dataBr(comHora = false))
         }
     }
 
     private companion object {
         val STATUS_CANCELADO = PedidoRepositorio.STATUS.last()
+        const val STATUS_ENTREGUE = "Entregue"
     }
 }

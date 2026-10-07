@@ -27,4 +27,12 @@
     <color name="petlar_banner_fim">#FFECDCD0</color>
     <color name="petlar_banner_borda">#FFD5C3B5</color>
     <color name="petlar_sobreposicao_hero">#80000000</color>
+
+    <!-- Selos de status do painel (admin.html) -->
+    <color name="status_fundo">#FFECD6C6</color>
+    <color name="status_texto">#FF6D3F27</color>
+    <color name="status_cancelado_fundo">#FFF6DCDB</color>
+    <color name="status_cancelado_texto">#FFA23B37</color>
+    <color name="status_entregue_fundo">#FFE2EFE2</color>
+    <color name="status_entregue_texto">#FF2E6B31</color>
 </resources>

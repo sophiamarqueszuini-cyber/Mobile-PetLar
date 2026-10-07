@@ -1,6 +1,7 @@
 package com.example.petshoptcc.activity
 
 import android.content.Intent
+import android.graphics.drawable.BitmapDrawable
 import android.os.Bundle
 import android.util.TypedValue
 import android.view.View
@@ -15,7 +16,6 @@ import com.example.petshoptcc.data.TipoAcesso
 import com.example.petshoptcc.data.UsuarioRepositorio
 import com.example.petshoptcc.databinding.ActivityMainBinding
 import com.example.petshoptcc.databinding.ItemContatoBinding
-import com.example.petshoptcc.databinding.ItemContatoCartaoBinding
 import com.example.petshoptcc.databinding.ItemMenuLinkBinding
 import com.example.petshoptcc.databinding.ItemPropositoBinding
 import com.example.petshoptcc.ui.adicionarNaGrade
@@ -61,6 +61,8 @@ class MainActivity : AppCompatActivity() {
         binding.btnReservar.setOnClickListener { abrirLink(Catalogo.WHATSAPP_AGENDAR) }
         binding.btnVerBoutique.setOnClickListener { startActivity(Intent(this, Produtos::class.java)) }
         binding.cenaCartao.setOnClickListener { virarCartao() }
+        // QR Code nítido, sem suavizar os quadradinhos (image-rendering: pixelated do site)
+        (binding.imgQrCode.drawable as? BitmapDrawable)?.isFilterBitmap = false
 
         montarNavbar()
         montarPropositos()
@@ -166,15 +168,6 @@ class MainActivity : AppCompatActivity() {
             linha.txtCanal.text = getString(R.string.contato_canal, contato.canal)
             linha.txtValor.text = contato.valor
             linha.root.setOnClickListener { abrirLink(contato.link) }
-        }
-
-        // Verso do cartão digital
-        val itensCartao = listOf(getString(R.string.cartao_endereco) to Catalogo.ENDERECO) +
-            Catalogo.contatos.take(3).map { it.canal to it.valor }
-        itensCartao.forEach { (rotulo, valor) ->
-            val item = ItemContatoCartaoBinding.inflate(layoutInflater, binding.listaContatosCartao, true)
-            item.txtRotulo.text = rotulo
-            item.txtValor.text = valor
         }
 
         binding.txtRodapeContatos.text = Catalogo.contatos.joinToString("\n") { it.valor }

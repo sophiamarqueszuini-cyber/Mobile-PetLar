@@ -159,6 +159,10 @@
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">12dp</item>
     </style>
+    <style name="ShapeAppearance.PetLar.Painel" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">16dp</item>
+    </style>
 
     <!-- Botões: retos, caixa alta e espaçados como no site -->
     <style name="Widget.PetLar.Button" parent="Widget.Material3.Button">
@@ -238,6 +242,11 @@
     <!-- .stat-item / .card-secao: cantos de 12dp -->
     <style name="Widget.PetLar.Card.Arredondado">
         <item name="shapeAppearance">@style/ShapeAppearance.PetLar.Grande</item>
+    </style>
+    <!-- .cartao do painel administrativo: cantos de 16dp, padding de 1.5rem -->
+    <style name="Widget.PetLar.Card.Painel">
+        <item name="shapeAppearance">@style/ShapeAppearance.PetLar.Painel</item>
+        <item name="contentPadding">22dp</item>
     </style>
 
     <style name="Widget.PetLar.Toolbar" parent="Widget.Material3.Toolbar">

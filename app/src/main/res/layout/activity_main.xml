@@ -433,6 +433,7 @@
                     android:focusable="true"
                     android:clickable="true">
 
+                    <!-- FRENTE DO CARTÃO (.card-face) -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cartaoFrente"
                         android:layout_width="match_parent"
@@ -445,19 +446,21 @@
                             android:layout_height="match_parent"
                             android:gravity="center"
                             android:orientation="vertical"
-                            android:padding="28dp">
+                            android:paddingHorizontal="26dp"
+                            android:paddingVertical="34dp">
 
+                            <!-- Logo sem fundo, subido 30px como no site -->
                             <ImageView
-                                android:layout_width="180dp"
+                                android:layout_width="150dp"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="-30dp"
                                 android:adjustViewBounds="true"
-                                android:importantForAccessibility="no"
-                                android:src="@drawable/logo_petlar" />
+                                android:contentDescription="@string/marca_nome"
+                                android:src="@drawable/logo_cartao" />
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="16dp"
                                 android:text="@string/marca_sub"
                                 android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada"
                                 android:textSize="10sp" />
@@ -465,7 +468,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="24dp"
+                                android:layout_marginTop="30dp"
                                 android:gravity="center"
                                 android:text="@string/marca_slogan"
                                 android:textAppearance="@style/TextAppearance.PetLar.Citacao"
@@ -474,6 +477,7 @@
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
 
+                    <!-- VERSO DO CARTÃO COM QR CODE (.card-face-back) -->
                     <com.google.android.material.card.MaterialCardView
                         android:id="@+id/cartaoVerso"
                         android:layout_width="match_parent"
@@ -483,18 +487,35 @@
                         app:cardElevation="6dp">
 
                         <LinearLayout
-                            android:id="@+id/listaContatosCartao"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
                             android:orientation="vertical"
-                            android:padding="28dp">
+                            android:paddingHorizontal="26dp"
+                            android:paddingVertical="34dp">
 
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="24dp"
+                                android:layout_marginBottom="26dp"
                                 android:text="@string/cartao_verso_titulo"
                                 android:textAppearance="@style/TextAppearance.PetLar.Tag.Dourada" />
+
+                            <ImageView
+                                android:id="@+id/imgQrCode"
+                                android:layout_width="160dp"
+                                android:layout_height="160dp"
+                                android:layout_gravity="center_horizontal"
+                                android:layout_marginTop="10dp"
+                                android:layout_marginBottom="15dp"
+                                android:contentDescription="@string/cartao_qr_descricao"
+                                android:src="@drawable/qrcode_petlar" />
+
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/cartao_qr_instrucao"
+                                android:textColor="@color/petlar_texto"
+                                android:textSize="16sp" />
                         </LinearLayout>
                     </com.google.android.material.card.MaterialCardView>
                 </FrameLayout>

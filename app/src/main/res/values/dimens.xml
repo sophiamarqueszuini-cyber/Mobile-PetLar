@@ -4,4 +4,7 @@
     <dimen name="espaco_entre_linhas">14dp</dimen>
     <dimen name="altura_link_menu">34dp</dimen>
     <dimen name="espaco_link_menu">7dp</dimen>
+
+    <!-- Valor dos indicadores do painel (1.3rem em tela estreita, 1.7rem em tela larga) -->
+    <dimen name="painel_indicador_valor">21sp</dimen>
 </resources>

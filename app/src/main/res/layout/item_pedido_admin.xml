@@ -1,34 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Pedido na lista do painel administrativo -->
+<!-- .cartao.pedido do painel administrativo -->
 <com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    style="@style/Widget.PetLar.Card.Arredondado"
+    style="@style/Widget.PetLar.Card.Painel"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="12dp"
-    app:contentPaddingBottom="8dp"
-    app:contentPaddingLeft="18dp"
-    app:contentPaddingRight="18dp"
-    app:contentPaddingTop="16dp">
+    app:contentPaddingBottom="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
+        <!-- .pedido-topo -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:gravity="center_vertical"
+            android:baselineAligned="false"
+            android:gravity="top"
             android:orientation="horizontal">
 
             <TextView
                 android:id="@+id/txtNumero"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="12dp"
                 android:layout_weight="1"
-                android:textAppearance="@style/TextAppearance.PetLar.CartaoTitulo"
+                android:fontFamily="@font/zilla_slab_medium"
+                android:textColor="@color/petlar_texto"
+                android:textSize="19sp"
                 tools:text="Pedido #882421" />
 
             <TextView
@@ -37,9 +38,9 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/fundo_status"
                 android:fontFamily="@font/zilla_slab_semibold"
-                android:paddingHorizontal="10dp"
+                android:paddingHorizontal="12dp"
                 android:paddingVertical="3dp"
-                android:textColor="@color/petlar_marrom_texto"
+                android:textColor="@color/status_texto"
                 android:textSize="13sp"
                 tools:text="Pagamento confirmado" />
         </LinearLayout>
@@ -48,32 +49,34 @@
             android:id="@+id/txtCliente"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:textColor="@color/petlar_texto"
-            android:textSize="15sp"
+            android:layout_marginTop="4dp"
+            android:textColor="@color/petlar_texto_secundario"
+            android:textSize="14sp"
             tools:text="Maria Silva · maria@petlar.com" />
 
         <TextView
             android:id="@+id/txtDetalhes"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="2dp"
-            android:textAppearance="@style/TextAppearance.PetLar.Corpo"
+            android:textColor="@color/petlar_texto_secundario"
             android:textSize="14sp"
             tools:text="28/09/2026 12:05 · 3 itens · ⚡ PIX" />
 
-        <!-- Produtos do pedido (uma linha item_linha_valor por produto) -->
+        <!-- .itens: uma linha item_produto_pedido por produto, entre duas linhas -->
         <LinearLayout
             android:id="@+id/listaItens"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="6dp"
-            android:orientation="vertical" />
+            android:layout_marginTop="16dp"
+            android:background="@drawable/fundo_itens_pedido"
+            android:orientation="vertical"
+            android:paddingVertical="12dp" />
 
+        <!-- .pedido-rodape -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
+            android:layout_marginTop="6dp"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -82,9 +85,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:fontFamily="@font/zilla_slab_bold"
+                android:fontFamily="@font/zilla_slab_semibold"
                 android:textColor="@color/petlar_texto"
-                android:textSize="18sp"
+                android:textSize="19sp"
                 tools:text="R$ 587,10" />
 
             <com.google.android.material.button.MaterialButton
@@ -92,7 +95,11 @@
                 style="@style/Widget.PetLar.Button.Texto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@string/admin_alterar_status" />
+                android:layout_marginEnd="-12dp"
+                android:fontFamily="@font/zilla_slab_regular"
+                android:text="@string/admin_alterar_status"
+                android:textSize="16sp"
+                app:fontFamily="@font/zilla_slab_regular" />
         </LinearLayout>
     </LinearLayout>
 </com.google.android.material.card.MaterialCardView>

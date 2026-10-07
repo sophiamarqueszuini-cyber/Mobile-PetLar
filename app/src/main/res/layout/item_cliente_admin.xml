@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- .cliente-linha do painel administrativo -->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:paddingVertical="14dp">
+
+    <TextView
+        android:id="@+id/txtNome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/zilla_slab_semibold"
+        android:textColor="@color/petlar_texto"
+        android:textSize="16sp"
+        tools:text="Maria Silva" />
+
+    <TextView
+        android:id="@+id/txtDetalhes"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/petlar_texto_secundario"
+        android:textSize="14sp"
+        tools:text="maria@petlar.com · cliente desde 28/09/2026" />
+</LinearLayout>

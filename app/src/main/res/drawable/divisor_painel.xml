@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Linha entre os clientes do painel (.cliente-linha) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android">
+    <solid android:color="@color/petlar_borda" />
+    <size android:height="1dp" />
+</shape>
