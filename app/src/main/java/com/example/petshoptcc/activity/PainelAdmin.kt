@@ -23,6 +23,7 @@ import com.example.petshoptcc.util.dataBr
 import com.example.petshoptcc.util.emReais
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 
 /** Área da equipe: indicadores, pedidos (com troca de status) e clientes cadastrados. */
@@ -66,11 +67,16 @@ class PainelAdmin : AppCompatActivity() {
     private fun atualizar() {
         lifecycleScope.launch {
             try {
-                val todosPedidos = async { pedidos.todos() }
-                val clientes = async { usuarios.clientes() }
-                montarIndicadores(todosPedidos.await(), clientes.await().size)
-                montarPedidos(todosPedidos.await())
-                montarClientes(clientes.await())
+                // coroutineScope: se uma das buscas falhar (sem permissão, sem internet), o erro cai no catch
+                // em vez de derrubar o app
+                val (todosPedidos, clientes) = coroutineScope {
+                    val p = async { pedidos.todos() }
+                    val c = async { usuarios.clientes() }
+                    p.await() to c.await()
+                }
+                montarIndicadores(todosPedidos, clientes.size)
+                montarPedidos(todosPedidos)
+                montarClientes(clientes)
             } catch (e: Exception) {
                 Toast.makeText(this@PainelAdmin, R.string.admin_erro_carregar, Toast.LENGTH_LONG).show()
             }
