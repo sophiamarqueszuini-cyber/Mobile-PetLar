@@ -3,7 +3,7 @@
 Aplicativo Android do **PetLar**, com o design do site PetLar Sanctuary.
 Tem vitrine de produtos, carrinho, cadastro e login de clientes, perfil com endereços e um painel administrativo para a equipe.
 
-As contas e os pedidos ficam online no **Firebase**, no mesmo projeto do [site PetLar](https://sophiamarqueszuini-cyber.github.io/Petshop---PetLar/):
+As contas e os pedidos ficam online no **Firebase**, no mesmo projeto do [site PetLar]([https://sophiamarqueszuini-cyber.github.io/Petshop---PetLar/](https://petlar-sanctuary.github.io/Petshop---PetLar/login.html?voltar=)):
 - a mesma conta entra no app e no site;
 - um pedido feito no app aparece no painel administrativo do site, e vice-versa.
 
